@@ -76,6 +76,13 @@
 
         /* Print styles */
         @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            @page {
+                margin: 0.5in;
+            }
             body {
                 background: white !important;
                 padding: 0 !important;
@@ -89,12 +96,15 @@
                 border-radius: 0 !important;
                 max-width: 100% !important;
                 margin: 0 !important;
-                padding: 30px !important;
+                padding: 20px !important;
+                background: white !important;
+                -webkit-backdrop-filter: none !important;
+                backdrop-filter: none !important;
             }
             .editable-field {
                 border: none !important;
                 box-shadow: none !important;
-                padding: 0 !important;
+                padding: 2px 0 !important;
                 background: transparent !important;
             }
             input, textarea, select {
@@ -102,8 +112,55 @@
                 box-shadow: none !important;
                 background: transparent !important;
             }
+            input[type="date"] {
+                -webkit-appearance: none !important;
+                appearance: none !important;
+                padding: 2px 0 !important;
+            }
             .line-item-delete {
                 display: none !important;
+            }
+
+            /* Force horizontal layouts for print (responsive breakpoints may not trigger) */
+            #invoiceHeader {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                align-items: flex-start !important;
+            }
+            #fromBillTo {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 2rem !important;
+            }
+            #bottomSection {
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 2rem !important;
+            }
+            #bottomSection > div:first-child {
+                flex: 1 !important;
+            }
+            #bottomSection > div:last-child {
+                width: 280px !important;
+            }
+
+            /* Line items grid */
+            .line-header,
+            .line-item-row {
+                display: grid !important;
+                grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+                gap: 0.75rem !important;
+            }
+            .line-header {
+                display: grid !important;
+            }
+
+            /* Payment instructions section */
+            .print-bg {
+                background-color: #f8faff !important;
+                border-radius: 0.75rem !important;
+                padding: 1.5rem !important;
             }
         }
 
@@ -160,27 +217,17 @@
     <main class="invoice-container max-w-5xl mx-auto bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6 md:p-10">
 
         <!-- Invoice Header -->
-        <section class="flex flex-col md:flex-row justify-between gap-8 mb-8">
-            <!-- Company Info (Left) -->
+        <section class="flex flex-col md:flex-row justify-between gap-6 mb-6" id="invoiceHeader">
+            <!-- Logo & Invoice Title -->
             <div class="flex items-start gap-4">
                 <div class="w-16 h-16 bg-[#eef2ff] rounded-2xl flex items-center justify-center flex-shrink-0">
                     <span class="material-symbols-outlined text-[#4059aa]" style="font-size: 32px;">edit_note</span>
                 </div>
-                <div class="space-y-1">
-                    <input type="text" class="editable-field block text-lg font-bold text-gray-800 bg-transparent rounded-lg px-2 py-1 w-full"
-                           value="Your Company Name" aria-label="Company Name">
-                    <input type="text" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
-                           value="123 Business St, Suite 100" aria-label="Address Line 1">
-                    <input type="text" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
-                           value="City, State 12345" aria-label="Address Line 2">
-                    <input type="email" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
-                           value="contact@company.com" aria-label="Email">
-                </div>
+                <h2 class="text-3xl font-bold text-[#4059aa] mt-3">INVOICE</h2>
             </div>
 
             <!-- Invoice Details (Right) -->
             <div class="text-right">
-                <h2 class="text-3xl font-bold text-[#4059aa] mb-4">INVOICE</h2>
                 <div class="space-y-3">
                     <div class="flex items-center justify-end gap-3">
                         <label class="text-sm font-medium text-gray-500">Invoice Number</label>
@@ -204,6 +251,43 @@
                             <div class="toggle-thumb"></div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- From & Bill To -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8" id="fromBillTo">
+            <!-- From (Individual) -->
+            <div>
+                <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">From</h4>
+                <div class="space-y-1">
+                    <input type="text" id="fromName" class="editable-field block text-sm font-semibold text-gray-800 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="Your Name" aria-label="Your Name" onchange="saveToStorage()">
+                    <input type="text" id="fromAddress1" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="123 Street Address" aria-label="Your Address" onchange="saveToStorage()">
+                    <input type="text" id="fromAddress2" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="City, State 12345" aria-label="Your City and State" onchange="saveToStorage()">
+                    <input type="email" id="fromEmail" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="your@email.com" aria-label="Your Email" onchange="saveToStorage()">
+                    <input type="tel" id="fromPhone" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="+1 (555) 000-0000" aria-label="Your Phone" onchange="saveToStorage()">
+                </div>
+            </div>
+
+            <!-- Bill To (Company) -->
+            <div>
+                <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Bill To</h4>
+                <div class="space-y-1">
+                    <input type="text" id="billToCompany" class="editable-field block text-sm font-semibold text-gray-800 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="Client Company Name" aria-label="Client Company Name" onchange="saveToStorage()">
+                    <input type="text" id="billToContact" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="Contact Person" aria-label="Client Contact Person" onchange="saveToStorage()">
+                    <input type="text" id="billToAddress1" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="Company Address" aria-label="Client Address" onchange="saveToStorage()">
+                    <input type="text" id="billToAddress2" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="City, State 12345" aria-label="Client City and State" onchange="saveToStorage()">
+                    <input type="email" id="billToEmail" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="billing@company.com" aria-label="Client Email" onchange="saveToStorage()">
                 </div>
             </div>
         </section>
@@ -240,11 +324,11 @@
         </section>
 
         <!-- Bottom Section: Payment Info + Totals -->
-        <section class="flex flex-col lg:flex-row gap-8 mt-8">
+        <section class="flex flex-col lg:flex-row gap-8 mt-8" id="bottomSection">
 
             <!-- Payment Instructions (Left) -->
             <div class="flex-1">
-                <div class="bg-[#f8faff] rounded-2xl p-6">
+                <div class="bg-[#f8faff] rounded-2xl p-6 print-bg">
                     <h4 class="font-semibold text-gray-700 flex items-center gap-2 mb-4">
                         <span class="material-symbols-outlined text-[#4059aa]">account_balance</span>
                         Payment Instructions
@@ -566,7 +650,17 @@
                     includeTax: includeTax,
                     taxRateSelect: document.getElementById('taxRateSelect').value,
                     customTaxRate: document.getElementById('customTaxRate').value,
-                    note: document.getElementById('noteField').value
+                    note: document.getElementById('noteField').value,
+                    fromName: document.getElementById('fromName').value,
+                    fromAddress1: document.getElementById('fromAddress1').value,
+                    fromAddress2: document.getElementById('fromAddress2').value,
+                    fromEmail: document.getElementById('fromEmail').value,
+                    fromPhone: document.getElementById('fromPhone').value,
+                    billToCompany: document.getElementById('billToCompany').value,
+                    billToContact: document.getElementById('billToContact').value,
+                    billToAddress1: document.getElementById('billToAddress1').value,
+                    billToAddress2: document.getElementById('billToAddress2').value,
+                    billToEmail: document.getElementById('billToEmail').value
                 };
                 localStorage.setItem('editorialLedger', JSON.stringify(data));
             } catch (e) {
@@ -590,6 +684,20 @@
                 if (data.note !== undefined) document.getElementById('noteField').value = data.note;
                 if (data.taxRateSelect) document.getElementById('taxRateSelect').value = data.taxRateSelect;
                 if (data.customTaxRate) document.getElementById('customTaxRate').value = data.customTaxRate;
+
+                // From fields
+                if (data.fromName) document.getElementById('fromName').value = data.fromName;
+                if (data.fromAddress1) document.getElementById('fromAddress1').value = data.fromAddress1;
+                if (data.fromAddress2) document.getElementById('fromAddress2').value = data.fromAddress2;
+                if (data.fromEmail) document.getElementById('fromEmail').value = data.fromEmail;
+                if (data.fromPhone) document.getElementById('fromPhone').value = data.fromPhone;
+
+                // Bill To fields
+                if (data.billToCompany) document.getElementById('billToCompany').value = data.billToCompany;
+                if (data.billToContact) document.getElementById('billToContact').value = data.billToContact;
+                if (data.billToAddress1) document.getElementById('billToAddress1').value = data.billToAddress1;
+                if (data.billToAddress2) document.getElementById('billToAddress2').value = data.billToAddress2;
+                if (data.billToEmail) document.getElementById('billToEmail').value = data.billToEmail;
 
                 if (data.showDueDate === false) toggleDueDate();
                 if (data.includeTax === true) {
