@@ -7,7 +7,7 @@
 
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#3b4f96">
+    <meta name="theme-color" content="#324786">
     <meta name="description" content="A simple, private invoice generator. Works offline — no data leaves your browser.">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -41,9 +41,9 @@
             border-color: rgba(129, 181, 246, 0.3);
         }
         .editable-field:focus {
-            border-color: rgba(59, 79, 150, 0.5);
+            border-color: rgba(50, 71, 134, 0.5);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(59, 79, 150, 0.1);
+            box-shadow: 0 0 0 3px rgba(50, 71, 134, 0.1);
         }
 
         /* Toggle switch */
@@ -57,7 +57,7 @@
             transition: background 0.3s ease;
         }
         .toggle-track.active {
-            background: #3b4f96;
+            background: #324786;
         }
         .toggle-thumb {
             width: 20px;
@@ -255,13 +255,13 @@
         /* PWA install banner */
         .privacy-banner {
             background: linear-gradient(90deg, #f8faff, #eef2ff);
-            border: 1px solid rgba(59, 79, 150, 0.14);
-            box-shadow: 0 8px 24px rgba(59, 79, 150, 0.08);
+            border: 1px solid rgba(50, 71, 134, 0.14);
+            box-shadow: 0 8px 24px rgba(50, 71, 134, 0.08);
         }
 
         .app-shell {
             background: #eceff8;
-            border: 1px solid rgba(59, 79, 150, 0.12);
+            border: 1px solid rgba(50, 71, 134, 0.12);
             border-radius: 1.5rem;
             box-shadow: 0 24px 50px rgba(17, 24, 39, 0.08);
         }
@@ -274,16 +274,16 @@
     <div class="max-w-7xl mx-auto app-shell p-4 md:p-6 lg:p-7">
 
     <!-- Header -->
-    <header class="mb-6 no-print bg-white rounded-2xl border border-[#3b4f96]/10 px-5 py-4">
+    <header class="mb-6 no-print bg-white rounded-2xl border border-[#324786]/10 px-5 py-4">
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-[#3b4f96]" style="font-size: 22px;">edit_note</span>
+                <span class="material-symbols-outlined text-[#324786]" style="font-size: 22px;">edit_note</span>
                 <h1 class="text-lg font-bold text-gray-700">The Editorial Ledger</h1>
             </div>
 
             <div class="flex items-center gap-3">
                 <button onclick="window.print()"
-                        class="bg-[#3b4f96] hover:bg-[#2d4280] text-white px-5 py-2 rounded-xl text-sm font-medium transition-all inline-flex items-center gap-2">
+                        class="bg-[#324786] hover:bg-[#273a6f] text-white px-5 py-2 rounded-xl text-sm font-medium transition-all inline-flex items-center gap-2">
                     <span class="material-symbols-outlined" style="font-size:18px;">print</span>
                     Print / Save as PDF
                 </button>
@@ -294,7 +294,7 @@
     <!-- Privacy Banner -->
     <div class="mb-4 no-print">
         <div class="privacy-banner rounded-2xl px-4 py-3 flex flex-wrap items-center justify-center gap-2 text-sm text-gray-600">
-            <span class="material-symbols-outlined text-[#3b4f96]" style="font-size: 18px;">lock</span>
+            <span class="material-symbols-outlined text-[#324786]" style="font-size: 18px;">lock</span>
             <span><strong>100% Private</strong> — No data is sent anywhere. Everything works completely in your browser.</span>
             <span class="material-symbols-outlined text-green-600" style="font-size: 18px;">wifi_off</span>
             <span class="text-xs text-gray-400">Works offline too.</span>
@@ -302,14 +302,14 @@
     </div>
 
     <!-- Invoice Container -->
-    <main class="invoice-container max-w-5xl mx-auto bg-white rounded-2xl shadow-md border border-[#3b4f96]/10 p-6 md:p-10">
+    <main class="invoice-container max-w-5xl mx-auto bg-white rounded-2xl shadow-md border border-[#324786]/10 p-6 md:p-10">
 
         <!-- Invoice Header -->
-        <section class="flex flex-col md:flex-row justify-between gap-6 mb-10" id="invoiceHeader">
+        <section class="flex flex-col md:flex-row justify-between gap-4 mb-8" id="invoiceHeader">
             <!-- Left: Icon + Sender Info -->
             <div>
                 <div class="w-14 h-14 bg-[#eef2ff] rounded-xl flex items-center justify-center mb-2">
-                    <span class="material-symbols-outlined text-[#3b4f96]" style="font-size: 32px;">edit_note</span>
+                    <span class="material-symbols-outlined text-[#324786]" style="font-size: 32px;">edit_note</span>
                 </div>
                 <div class="space-y-1">
                     <input type="text" id="fromName" class="editable-field block text-lg font-bold text-gray-800 bg-transparent rounded-lg px-2 py-0.5 w-full"
@@ -329,21 +329,21 @@
 
             <!-- Right: INVOICE title + Details -->
             <div class="text-right">
-                <h2 class="text-4xl font-bold text-[#3b4f96] mb-4">INVOICE</h2>
-                <div class="space-y-3">
+                <h2 class="text-4xl font-bold text-[#324786] mb-4">INVOICE</h2>
+                <div class="space-y-2">
                     <div>
-                        <label class="text-xs font-semibold text-[#3b4f96]/70 uppercase tracking-wider">Invoice Number</label>
+                        <label class="text-xs font-semibold text-[#324786]/70 uppercase tracking-wider">Invoice Number</label>
                         <input type="text" id="invoiceNumber"
                                class="editable-field bg-[#f8faff] rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto"
                                value="INV-Y2403-001" onchange="updateMemo()">
                     </div>
                     <div>
-                        <label class="text-xs font-semibold text-[#3b4f96]/70 uppercase tracking-wider">Date Issued</label>
+                        <label class="text-xs font-semibold text-[#324786]/70 uppercase tracking-wider">Date Issued</label>
                         <input type="date" id="dateIssued"
                                class="editable-field bg-[#f8faff] rounded-2xl px-4 py-2 text-sm font-semibold w-44 block ml-auto">
                     </div>
                     <div id="dueDateRow">
-                        <label class="text-xs font-semibold text-[#3b4f96]/70 uppercase tracking-wider">Due Date</label>
+                        <label class="text-xs font-semibold text-[#324786]/70 uppercase tracking-wider">Due Date</label>
                         <input type="date" id="dueDate"
                                class="editable-field bg-[#f8faff] rounded-2xl px-4 py-2 text-sm font-semibold w-44 block ml-auto">
                     </div>
@@ -358,9 +358,9 @@
         </section>
 
         <!-- Bill To -->
-        <section class="mb-10" id="billToSection">
-            <div class="rounded-2xl bg-[#f8faff] border border-[#3b4f96]/10 p-5 md:max-w-md">
-                <h4 class="text-xs font-semibold text-[#3b4f96]/70 uppercase tracking-wider mb-3">Bill To</h4>
+        <section class="mt-2 mb-8" id="billToSection">
+            <div class="rounded-2xl bg-[#f8faff] border border-[#324786]/10 p-4 max-w-md">
+                <h4 class="text-xs font-semibold text-[#324786]/70 uppercase tracking-wider mb-3">Bill To</h4>
                 <div class="space-y-1">
                     <input type="text" id="billToCompany" class="editable-field block text-lg font-bold text-gray-800 bg-transparent rounded-lg px-2 py-0.5 w-full"
                            value="Client Company Name" aria-label="Client Company Name" onchange="saveToStorage()">
@@ -390,7 +390,7 @@
         </section>
 
         <!-- Line Items Table -->
-        <section class="mb-8">
+        <section class="mb-6">
             <div class="line-header grid grid-cols-12 gap-3 text-sm font-semibold text-gray-500 px-3 mb-3">
                 <div class="col-span-6">Item</div>
                 <div class="col-span-2 text-center">Qty</div>
@@ -403,20 +403,20 @@
             </div>
 
             <button onclick="addLineItem()"
-                    class="mt-6 flex items-center gap-2 text-[#3b4f96] hover:text-[#2d4280] font-medium no-print">
+                    class="mt-6 flex items-center gap-2 text-[#324786] hover:text-[#273a6f] font-medium no-print">
                 <span class="material-symbols-outlined">add_circle</span>
                 Add Line Item
             </button>
         </section>
 
         <!-- Bottom Section: Payment Info + Totals -->
-        <section class="flex flex-col lg:flex-row gap-8 mt-8" id="bottomSection">
+        <section class="flex flex-col lg:flex-row gap-6 mt-6" id="bottomSection">
 
             <!-- Payment Instructions (Left) -->
             <div class="flex-1">
                 <div class="bg-[#f8faff] rounded-2xl p-6 print-bg">
                     <h4 class="font-semibold text-gray-700 flex items-center gap-2 mb-4">
-                        <span class="material-symbols-outlined text-[#3b4f96]">account_balance</span>
+                        <span class="material-symbols-outlined text-[#324786]">account_balance</span>
                         Payment Instructions
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -469,7 +469,6 @@
                         <span id="subtotal" class="text-sm font-semibold text-gray-700">$0.00</span>
                     </div>
 
-                    <hr class="border-[#81b5f6]/20 no-print">
                     <div class="flex items-center justify-between no-print">
                         <label class="text-sm text-gray-500">Include Tax</label>
                         <div id="taxToggle" class="toggle-track" onclick="toggleTax()">
@@ -502,7 +501,7 @@
 
                     <div class="flex justify-between items-center">
                         <span class="text-lg font-bold text-gray-800">Total Due</span>
-                        <span id="totalDue" class="text-lg font-bold text-[#3b4f96]">$0.00</span>
+                        <span id="totalDue" class="text-lg font-bold text-[#324786]">$0.00</span>
                     </div>
                 </div>
             </div>
@@ -511,7 +510,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="max-w-5xl mx-auto mt-7 text-center text-xs text-gray-400 no-print border-t border-[#3b4f96]/10 pt-5">
+    <footer class="max-w-5xl mx-auto mt-5 text-center text-xs text-gray-400 no-print border-t border-[#324786]/10 pt-5">
         <p class="font-medium">Built with ❤️ — The Editorial Ledger Invoice Generator</p>
         <p class="mt-1 flex items-center justify-center gap-1">
             <span class="material-symbols-outlined" style="font-size: 14px;">lock</span>
