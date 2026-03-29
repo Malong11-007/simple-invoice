@@ -397,20 +397,20 @@
             row.className = 'line-item-row grid grid-cols-12 gap-3 items-center mb-3';
             row.innerHTML =
                 '<div class="col-span-6">' +
-                    '<label class="sm:hidden text-xs font-medium text-gray-500 mb-1 block">Description</label>' +
-                    '<input type="text" placeholder="Enter description..." ' +
+                    '<label for="desc-' + lineItemCount + '" class="sm:hidden text-xs font-medium text-gray-500 mb-1 block">Description</label>' +
+                    '<input type="text" id="desc-' + lineItemCount + '" placeholder="Enter description..." ' +
                            'class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-3 text-sm" ' +
                            'aria-label="Item description" onchange="saveToStorage()">' +
                 '</div>' +
                 '<div class="col-span-2">' +
-                    '<label class="sm:hidden text-xs font-medium text-gray-500 mb-1 block">Qty</label>' +
-                    '<input type="number" min="0" step="1" value="1" ' +
+                    '<label for="qty-' + lineItemCount + '" class="sm:hidden text-xs font-medium text-gray-500 mb-1 block">Qty</label>' +
+                    '<input type="number" id="qty-' + lineItemCount + '" min="0" step="1" value="1" ' +
                            'class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-3 text-sm text-center" ' +
                            'aria-label="Quantity" oninput="calculateTotal()">' +
                 '</div>' +
                 '<div class="col-span-2">' +
-                    '<label class="sm:hidden text-xs font-medium text-gray-500 mb-1 block">Rate</label>' +
-                    '<input type="number" min="0" step="0.01" value="0" ' +
+                    '<label for="rate-' + lineItemCount + '" class="sm:hidden text-xs font-medium text-gray-500 mb-1 block">Rate</label>' +
+                    '<input type="number" id="rate-' + lineItemCount + '" min="0" step="0.01" value="0" ' +
                            'class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-3 text-sm text-center" ' +
                            'aria-label="Rate" oninput="calculateTotal()">' +
                 '</div>' +
