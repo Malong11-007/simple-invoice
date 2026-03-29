@@ -81,12 +81,14 @@
                 print-color-adjust: exact !important;
             }
             @page {
-                margin: 0.5in;
+                margin: 0.4in;
+                size: auto;
             }
             body {
                 background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
+                font-size: 12px !important;
             }
             .no-print {
                 display: none !important;
@@ -94,9 +96,10 @@
             .invoice-container {
                 box-shadow: none !important;
                 border-radius: 0 !important;
+                border: none !important;
                 max-width: 100% !important;
                 margin: 0 !important;
-                padding: 20px !important;
+                padding: 0 !important;
                 background: white !important;
                 -webkit-backdrop-filter: none !important;
                 backdrop-filter: none !important;
@@ -113,7 +116,7 @@
             .editable-field {
                 border: none !important;
                 box-shadow: none !important;
-                padding: 2px 0 !important;
+                padding: 1px 0 !important;
                 background: transparent !important;
             }
             input, textarea, select {
@@ -124,7 +127,7 @@
             input[type="date"] {
                 -webkit-appearance: none !important;
                 appearance: none !important;
-                padding: 2px 0 !important;
+                padding: 1px 0 !important;
             }
             .line-item-delete {
                 display: none !important;
@@ -136,35 +139,99 @@
                 flex-direction: row !important;
                 justify-content: space-between !important;
                 align-items: flex-start !important;
+                margin-bottom: 0.75rem !important;
+                gap: 1rem !important;
+            }
+            #invoiceHeader .w-14 {
+                width: 2.5rem !important;
+                height: 2.5rem !important;
+                margin-bottom: 0.5rem !important;
+            }
+            #invoiceHeader h2 {
+                font-size: 1.75rem !important;
+                margin-bottom: 0.5rem !important;
             }
             #billToSection {
-                margin-bottom: 2rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            #billToSection .rounded-2xl {
+                padding: 0.75rem 1rem !important;
             }
             #bottomSection {
                 display: flex !important;
                 flex-direction: row !important;
-                gap: 2rem !important;
+                gap: 1rem !important;
+                margin-top: 0.75rem !important;
             }
             #bottomSection > div:first-child {
                 flex: 1 !important;
             }
             #bottomSection > div:last-child {
-                width: 280px !important;
+                width: 250px !important;
             }
 
-            /* Line items grid */
-            .line-header,
+            /* Reduce line items spacing */
+            .line-header {
+                display: grid !important;
+                grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+                gap: 0.5rem !important;
+                margin-bottom: 0.25rem !important;
+                padding-left: 0.25rem !important;
+                padding-right: 0.25rem !important;
+            }
             .line-item-row {
                 display: grid !important;
                 grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
-                gap: 0.75rem !important;
+                gap: 0.5rem !important;
+                margin-bottom: 0.15rem !important;
+            }
+            .line-item-row input {
+                padding: 0.15rem 0.25rem !important;
+                font-size: 11px !important;
             }
 
             /* Payment instructions section */
             .print-bg {
                 background-color: #f8faff !important;
-                border-radius: 0.75rem !important;
-                padding: 1.5rem !important;
+                border-radius: 0.5rem !important;
+                padding: 0.75rem !important;
+            }
+            .print-bg .grid {
+                gap: 0.25rem 0.75rem !important;
+            }
+            .print-bg label {
+                margin-bottom: 0 !important;
+                font-size: 10px !important;
+            }
+            .print-bg input {
+                padding: 0.15rem 0.25rem !important;
+                font-size: 11px !important;
+            }
+            .print-bg h4 {
+                margin-bottom: 0.5rem !important;
+                font-size: 12px !important;
+            }
+            .print-bg textarea {
+                padding: 0.25rem !important;
+                font-size: 11px !important;
+                max-height: 2.5rem !important;
+                overflow: hidden !important;
+            }
+            .print-bg .mt-4 {
+                margin-top: 0.25rem !important;
+            }
+
+            /* Totals section */
+            #bottomSection .bg-\[\#f8faff\] {
+                padding: 0.75rem !important;
+            }
+            #bottomSection .space-y-4 > * + * {
+                margin-top: 0.5rem !important;
+            }
+
+            /* Compact the line items section container */
+            #lineItems {
+                margin-bottom: 0 !important;
             }
         }
 
