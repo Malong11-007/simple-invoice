@@ -240,7 +240,7 @@
                         <label class="text-xs font-medium text-gray-500 mb-1 block">Note</label>
                         <textarea id="noteField" rows="3"
                                   class="w-full bg-white rounded-2xl p-4 text-sm border border-[#81b5f6]/30 focus:outline-none editable-field"
-                                  placeholder="Enter additional note here...">This invoice supports only USD ACH inbound transfers. No other payment methods are accepted.</textarea>
+                                  placeholder="Enter additional note here...">Payment is due upon receipt. Please include the invoice number as a reference with your payment.</textarea>
                     </div>
                 </div>
             </div>
@@ -300,6 +300,9 @@
     <footer class="max-w-5xl mx-auto mt-6 text-center text-sm text-gray-400 no-print">
         <p>Built with ❤️ — The Editorial Ledger Invoice Generator</p>
     </footer>
+
+    <!-- Accessibility announcements -->
+    <div id="ariaAnnounce" role="status" aria-live="polite" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)"></div>
 
     <script>
         // ============================================
@@ -371,11 +374,18 @@
             calculateTotal();
         }
 
+        function announce(message) {
+            var el = document.getElementById('ariaAnnounce');
+            el.textContent = message;
+            setTimeout(function() { el.textContent = ''; }, 1000);
+        }
+
         function removeLineItem(itemId) {
             const item = document.getElementById(itemId);
             if (item && document.getElementById('lineItems').children.length > 1) {
                 item.remove();
                 calculateTotal();
+                announce('Line item removed');
             }
         }
 
