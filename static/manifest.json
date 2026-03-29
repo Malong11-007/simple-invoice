@@ -2,7 +2,7 @@
   "name": "The Editorial Ledger",
   "short_name": "Invoice",
   "description": "A simple, private invoice generator that works entirely in your browser — no data is sent anywhere.",
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#eef2ff",
