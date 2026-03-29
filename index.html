@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>The Editorial Ledger — Simple Invoice Generator</title>
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4059aa">
+    <meta name="description" content="A simple, private invoice generator. Works offline — no data leaves your browser.">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Invoice">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512x512.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 50%, #c7d2fe 100%);
+            min-height: 100vh;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Editable fields styling */
+        .editable-field {
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .editable-field:hover {
+            border-color: rgba(129, 181, 246, 0.3);
+        }
+        .editable-field:focus {
+            border-color: rgba(64, 89, 170, 0.5);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(64, 89, 170, 0.1);
+        }
+
+        /* Toggle switch */
+        .toggle-track {
+            width: 44px;
+            height: 24px;
+            background: #d1d5db;
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .toggle-track.active {
+            background: #4059aa;
+        }
+        .toggle-thumb {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .toggle-track.active .toggle-thumb {
+            transform: translateX(20px);
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .invoice-container {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 30px !important;
+            }
+            .editable-field {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                background: transparent !important;
+            }
+            input, textarea, select {
+                border: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+            }
+            .line-item-delete {
+                display: none !important;
+            }
+        }
+
+        /* Mobile: stack line items vertically */
+        @media (max-width: 640px) {
+            .line-item-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+            .line-item-row .col-span-6 {
+                grid-column: span 2;
+            }
+            .line-item-row .col-span-2 {
+                grid-column: span 1;
+            }
+            .line-header {
+                display: none;
+            }
+        }
+
+        /* PWA install banner */
+        .privacy-banner {
+            background: linear-gradient(90deg, #eef2ff, #e0e7ff);
+            border: 1px solid rgba(129, 181, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Privacy Banner -->
+    <div class="max-w-5xl mx-auto mb-4 no-print">
+        <div class="privacy-banner rounded-2xl px-4 py-3 flex flex-wrap items-center justify-center gap-2 text-sm text-gray-600">
+            <span class="material-symbols-outlined text-[#4059aa]" style="font-size: 18px;">lock</span>
+            <span><strong>100% Private</strong> — No data is sent anywhere. Everything works completely in your browser.</span>
+            <span class="material-symbols-outlined text-green-600" style="font-size: 18px;">wifi_off</span>
+            <span class="text-xs text-gray-400">Works offline too.</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="max-w-5xl mx-auto mb-6 flex flex-wrap items-center justify-between gap-4 no-print">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#4059aa]" style="font-size: 36px;">edit_note</span>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">The Editorial Ledger</h1>
+        </div>
+        <button onclick="window.print()"
+                class="bg-[#4059aa] hover:bg-[#334d9d] text-white px-6 py-3 rounded-2xl font-medium flex items-center gap-2 transition-all">
+            <span class="material-symbols-outlined">print</span>
+            Print / Save as PDF
+        </button>
+    </header>
+
+    <!-- Invoice Container -->
+    <main class="invoice-container max-w-5xl mx-auto bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6 md:p-10">
+
+        <!-- Invoice Header -->
+        <section class="flex flex-col md:flex-row justify-between gap-8 mb-8">
+            <!-- Company Info (Left) -->
+            <div class="flex items-start gap-4">
+                <div class="w-16 h-16 bg-[#eef2ff] rounded-2xl flex items-center justify-center flex-shrink-0">
+                    <span class="material-symbols-outlined text-[#4059aa]" style="font-size: 32px;">edit_note</span>
+                </div>
+                <div class="space-y-1">
+                    <input type="text" class="editable-field block text-lg font-bold text-gray-800 bg-transparent rounded-lg px-2 py-1 w-full"
+                           value="Your Company Name" aria-label="Company Name">
+                    <input type="text" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="123 Business St, Suite 100" aria-label="Address Line 1">
+                    <input type="text" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="City, State 12345" aria-label="Address Line 2">
+                    <input type="email" class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
+                           value="contact@company.com" aria-label="Email">
+                </div>
+            </div>
+
+            <!-- Invoice Details (Right) -->
+            <div class="text-right">
+                <h2 class="text-3xl font-bold text-[#4059aa] mb-4">INVOICE</h2>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-end gap-3">
+                        <label class="text-sm font-medium text-gray-500">Invoice Number</label>
+                        <input type="text" id="invoiceNumber"
+                               class="editable-field bg-[#f8faff] rounded-2xl px-4 py-2 text-sm font-medium text-right w-44"
+                               value="INV-Y2403-001" onchange="updateMemo()">
+                    </div>
+                    <div class="flex items-center justify-end gap-3">
+                        <label class="text-sm font-medium text-gray-500">Date Issued</label>
+                        <input type="date" id="dateIssued"
+                               class="editable-field bg-[#f8faff] rounded-2xl px-4 py-2 text-sm font-medium w-44">
+                    </div>
+                    <div id="dueDateRow" class="flex items-center justify-end gap-3">
+                        <label class="text-sm font-medium text-gray-500">Due Date</label>
+                        <input type="date" id="dueDate"
+                               class="editable-field bg-[#f8faff] rounded-2xl px-4 py-2 text-sm font-medium w-44">
+                    </div>
+                    <div class="flex items-center justify-end gap-3 no-print">
+                        <label class="text-sm text-gray-500 mr-1">Show Due Date</label>
+                        <div id="dueDateToggle" class="toggle-track active" onclick="toggleDueDate()">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Currency Selector -->
+        <section class="flex items-center gap-3 mb-6 no-print">
+            <label class="text-sm font-medium text-gray-600">Display Currency:</label>
+            <select id="currencySelect" onchange="changeCurrency()"
+                    class="bg-white border border-[#81b5f6]/30 rounded-2xl px-4 py-2 text-sm font-medium focus:outline-none">
+                <option value="$">USD ($)</option>
+                <option value="£">GBP (£)</option>
+                <option value="€">EUR (€)</option>
+            </select>
+        </section>
+
+        <!-- Line Items Table -->
+        <section class="mb-6">
+            <div class="line-header grid grid-cols-12 gap-3 text-sm font-semibold text-gray-500 px-3 mb-3">
+                <div class="col-span-6">Description</div>
+                <div class="col-span-2 text-center">Qty</div>
+                <div class="col-span-2 text-center">Rate</div>
+                <div class="col-span-2 text-right">Amount</div>
+            </div>
+
+            <div id="lineItems">
+                <!-- Line items will be added here dynamically -->
+            </div>
+
+            <button onclick="addLineItem()"
+                    class="mt-6 flex items-center gap-2 text-[#4059aa] hover:text-[#334d9d] font-medium no-print">
+                <span class="material-symbols-outlined">add_circle</span>
+                Add Line Item
+            </button>
+        </section>
+
+        <!-- Bottom Section: Payment Info + Totals -->
+        <section class="flex flex-col lg:flex-row gap-8 mt-8">
+
+            <!-- Payment Instructions (Left) -->
+            <div class="flex-1">
+                <div class="bg-[#f8faff] rounded-2xl p-6">
+                    <h4 class="font-semibold text-gray-700 flex items-center gap-2 mb-4">
+                        <span class="material-symbols-outlined text-[#4059aa]">account_balance</span>
+                        Payment Instructions
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 mb-1 block">Bank Name</label>
+                            <input type="text" class="editable-field w-full bg-white rounded-xl px-3 py-2 text-sm"
+                                   placeholder="Enter bank name" aria-label="Bank Name">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 mb-1 block">Account Holder</label>
+                            <input type="text" class="editable-field w-full bg-white rounded-xl px-3 py-2 text-sm"
+                                   placeholder="Enter account holder" aria-label="Account Holder">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 mb-1 block">Routing Number</label>
+                            <input type="text" class="editable-field w-full bg-white rounded-xl px-3 py-2 text-sm"
+                                   placeholder="Enter routing number" aria-label="Routing Number">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 mb-1 block">Account Number</label>
+                            <input type="text" class="editable-field w-full bg-white rounded-xl px-3 py-2 text-sm"
+                                   placeholder="Enter account number" aria-label="Account Number">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 mb-1 block">Account Type</label>
+                            <input type="text" class="editable-field w-full bg-white rounded-xl px-3 py-2 text-sm"
+                                   placeholder="e.g. Checking" aria-label="Account Type">
+                        </div>
+                        <div>
+                            <label class="text-xs font-medium text-gray-500 mb-1 block">Payment Memo / Reference</label>
+                            <input type="text" id="paymentMemo" class="editable-field w-full bg-white rounded-xl px-3 py-2 text-sm"
+                                   value="INV-Y2403-001" aria-label="Payment Memo" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <label class="text-xs font-medium text-gray-500 mb-1 block">Note</label>
+                        <textarea id="noteField" rows="3"
+                                  class="w-full bg-white rounded-2xl p-4 text-sm border border-[#81b5f6]/30 focus:outline-none editable-field"
+                                  placeholder="Enter additional note here...">Payment is due upon receipt. Please include the invoice number as a reference with your payment.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Totals (Right) -->
+            <div class="w-full lg:w-80">
+                <div class="bg-[#f8faff] rounded-2xl p-6 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-gray-500">Subtotal</span>
+                        <span id="subtotal" class="text-sm font-semibold text-gray-700">$0.00</span>
+                    </div>
+
+                    <hr class="border-[#81b5f6]/20">
+
+                    <!-- Tax Toggle -->
+                    <div class="flex items-center justify-between no-print">
+                        <label class="text-sm text-gray-500">Include Tax</label>
+                        <div id="taxToggle" class="toggle-track" onclick="toggleTax()">
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+
+                    <!-- Tax Rate -->
+                    <div id="taxSection" class="hidden">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm text-gray-500">Tax Rate</span>
+                                <select id="taxRateSelect" onchange="handleTaxRateChange()"
+                                        class="bg-white border border-[#81b5f6]/30 rounded-xl px-3 py-1 text-sm focus:outline-none">
+                                    <option value="0">0%</option>
+                                    <option value="5">5%</option>
+                                    <option value="8">8%</option>
+                                    <option value="10">10%</option>
+                                    <option value="custom">Custom %</option>
+                                </select>
+                                <input type="number" id="customTaxRate" min="0" max="100" step="0.01"
+                                       class="w-20 bg-white border border-[#81b5f6]/30 rounded-xl px-3 py-1 text-sm focus:outline-none hidden"
+                                       placeholder="%" onchange="calculateTotal()">
+                            </div>
+                            <span id="taxAmount" class="text-sm font-semibold text-gray-700">$0.00</span>
+                        </div>
+                    </div>
+
+                    <hr class="border-[#81b5f6]/20">
+
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-gray-800">Total Due</span>
+                        <span id="totalDue" class="text-lg font-bold text-[#4059aa]">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-5xl mx-auto mt-6 text-center text-sm text-gray-400 no-print">
+        <p>Built with ❤️ — The Editorial Ledger Invoice Generator</p>
+        <p class="mt-1 flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined" style="font-size: 14px;">lock</span>
+            Your data never leaves your device.
+        </p>
+    </footer>
+
+    <!-- Accessibility announcements -->
+    <div id="ariaAnnounce" role="status" aria-live="polite" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)"></div>
+
+    <script>
+        // ============================================
+        // State
+        // ============================================
+        let currencySymbol = '$';
+        let lineItemCount = 0;
+        let showDueDate = true;
+        let includeTax = false;
+
+        // ============================================
+        // Initialization
+        // ============================================
+        function init() {
+            // Set today's date
+            const today = new Date();
+            const todayStr = today.toISOString().split('T')[0];
+            document.getElementById('dateIssued').value = todayStr;
+
+            // Set due date to 30 days from now
+            const dueDate = new Date(today);
+            dueDate.setDate(dueDate.getDate() + 30);
+            document.getElementById('dueDate').value = dueDate.toISOString().split('T')[0];
+
+            // Add initial line item
+            addLineItem();
+
+            // Load saved data if available
+            loadFromStorage();
+        }
+
+        // ============================================
+        // Line Items
+        // ============================================
+        function addLineItem() {
+            lineItemCount++;
+            const container = document.getElementById('lineItems');
+            const itemId = 'item-' + lineItemCount;
+
+            const row = document.createElement('div');
+            row.id = itemId;
+            row.className = 'line-item-row grid grid-cols-12 gap-3 items-center mb-3';
+            row.innerHTML =
+                '<div class="col-span-6">' +
+                    '<label for="desc-' + lineItemCount + '" class="sm:hidden text-xs font-medium text-gray-500 mb-1 block">Description</label>' +
+                    '<input type="text" id="desc-' + lineItemCount + '" placeholder="Enter description..." ' +
+                           'class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-3 text-sm" ' +
+                           'aria-label="Item description" onchange="saveToStorage()">' +
+                '</div>' +
+                '<div class="col-span-2">' +
+                    '<label for="qty-' + lineItemCount + '" class="sm:hidden text-xs font-medium text-gray-500 mb-1 block">Qty</label>' +
+                    '<input type="number" id="qty-' + lineItemCount + '" min="0" step="1" value="1" ' +
+                           'class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-3 text-sm text-center" ' +
+                           'aria-label="Quantity" oninput="calculateTotal()">' +
+                '</div>' +
+                '<div class="col-span-2">' +
+                    '<label for="rate-' + lineItemCount + '" class="sm:hidden text-xs font-medium text-gray-500 mb-1 block">Rate</label>' +
+                    '<input type="number" id="rate-' + lineItemCount + '" min="0" step="0.01" value="0" ' +
+                           'class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-3 text-sm text-center" ' +
+                           'aria-label="Rate" oninput="calculateTotal()">' +
+                '</div>' +
+                '<div class="col-span-2 flex items-center justify-end gap-2">' +
+                    '<span class="line-amount text-sm font-semibold text-gray-700">' + currencySymbol + '0.00</span>' +
+                    '<button onclick="removeLineItem(\'' + itemId + '\')" ' +
+                            'class="line-item-delete text-gray-400 hover:text-red-500 transition-colors no-print p-2" ' +
+                            'title="Remove line item">' +
+                        '<span class="material-symbols-outlined" style="font-size: 20px;">delete</span>' +
+                    '</button>' +
+                '</div>';
+
+            container.appendChild(row);
+            calculateTotal();
+        }
+
+        function announce(message) {
+            var el = document.getElementById('ariaAnnounce');
+            el.textContent = message;
+            setTimeout(function() { el.textContent = ''; }, 1000);
+        }
+
+        function removeLineItem(itemId) {
+            const item = document.getElementById(itemId);
+            if (item && document.getElementById('lineItems').children.length > 1) {
+                item.remove();
+                calculateTotal();
+                announce('Line item removed');
+            }
+        }
+
+        // ============================================
+        // Calculations
+        // ============================================
+        function calculateTotal() {
+            const items = document.getElementById('lineItems').children;
+            let subtotal = 0;
+
+            for (let i = 0; i < items.length; i++) {
+                const inputs = items[i].querySelectorAll('input[type="number"]');
+                const qty = parseFloat(inputs[0].value) || 0;
+                const rate = parseFloat(inputs[1].value) || 0;
+                const amount = qty * rate;
+
+                const amountEl = items[i].querySelector('.line-amount');
+                if (amountEl) {
+                    amountEl.textContent = formatCurrency(amount);
+                }
+
+                subtotal += amount;
+            }
+
+            document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+
+            let taxAmount = 0;
+            const taxRate = includeTax ? getTaxRate() : 0;
+            taxAmount = subtotal * (taxRate / 100);
+            document.getElementById('taxAmount').textContent = formatCurrency(taxAmount);
+
+            const total = subtotal + taxAmount;
+            document.getElementById('totalDue').textContent = formatCurrency(total);
+
+            saveToStorage();
+        }
+
+        function getTaxRate() {
+            const select = document.getElementById('taxRateSelect');
+            if (select.value === 'custom') {
+                return parseFloat(document.getElementById('customTaxRate').value) || 0;
+            }
+            return parseFloat(select.value) || 0;
+        }
+
+        function formatCurrency(amount) {
+            return currencySymbol + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // ============================================
+        // Currency
+        // ============================================
+        function changeCurrency() {
+            currencySymbol = document.getElementById('currencySelect').value;
+            calculateTotal();
+        }
+
+        // ============================================
+        // Toggles
+        // ============================================
+        function toggleDueDate() {
+            showDueDate = !showDueDate;
+            const toggle = document.getElementById('dueDateToggle');
+            const row = document.getElementById('dueDateRow');
+
+            if (showDueDate) {
+                toggle.classList.add('active');
+                row.classList.remove('hidden');
+            } else {
+                toggle.classList.remove('active');
+                row.classList.add('hidden');
+            }
+        }
+
+        function toggleTax() {
+            includeTax = !includeTax;
+            const toggle = document.getElementById('taxToggle');
+            const section = document.getElementById('taxSection');
+
+            if (includeTax) {
+                toggle.classList.add('active');
+                section.classList.remove('hidden');
+            } else {
+                toggle.classList.remove('active');
+                section.classList.add('hidden');
+            }
+
+            calculateTotal();
+        }
+
+        function handleTaxRateChange() {
+            const select = document.getElementById('taxRateSelect');
+            const customInput = document.getElementById('customTaxRate');
+
+            if (select.value === 'custom') {
+                customInput.classList.remove('hidden');
+                customInput.focus();
+            } else {
+                customInput.classList.add('hidden');
+            }
+
+            calculateTotal();
+        }
+
+        // ============================================
+        // Payment Memo Sync
+        // ============================================
+        function updateMemo() {
+            const invoiceNum = document.getElementById('invoiceNumber').value;
+            document.getElementById('paymentMemo').value = invoiceNum;
+            saveToStorage();
+        }
+
+        // ============================================
+        // Local Storage (Persistence)
+        // ============================================
+        function saveToStorage() {
+            try {
+                const data = {
+                    invoiceNumber: document.getElementById('invoiceNumber').value,
+                    dateIssued: document.getElementById('dateIssued').value,
+                    dueDate: document.getElementById('dueDate').value,
+                    currency: document.getElementById('currencySelect').value,
+                    showDueDate: showDueDate,
+                    includeTax: includeTax,
+                    taxRateSelect: document.getElementById('taxRateSelect').value,
+                    customTaxRate: document.getElementById('customTaxRate').value,
+                    note: document.getElementById('noteField').value
+                };
+                localStorage.setItem('editorialLedger', JSON.stringify(data));
+            } catch (e) {
+                // Storage not available
+            }
+        }
+
+        function loadFromStorage() {
+            try {
+                const saved = localStorage.getItem('editorialLedger');
+                if (!saved) return;
+
+                const data = JSON.parse(saved);
+                if (data.invoiceNumber) document.getElementById('invoiceNumber').value = data.invoiceNumber;
+                if (data.dateIssued) document.getElementById('dateIssued').value = data.dateIssued;
+                if (data.dueDate) document.getElementById('dueDate').value = data.dueDate;
+                if (data.currency) {
+                    document.getElementById('currencySelect').value = data.currency;
+                    currencySymbol = data.currency;
+                }
+                if (data.note !== undefined) document.getElementById('noteField').value = data.note;
+                if (data.taxRateSelect) document.getElementById('taxRateSelect').value = data.taxRateSelect;
+                if (data.customTaxRate) document.getElementById('customTaxRate').value = data.customTaxRate;
+
+                if (data.showDueDate === false) toggleDueDate();
+                if (data.includeTax === true) {
+                    toggleTax();
+                    handleTaxRateChange();
+                }
+
+                updateMemo();
+            } catch (e) {
+                // Storage not available or data corrupted
+            }
+        }
+
+        // ============================================
+        // Start the app
+        // ============================================
+        document.addEventListener('DOMContentLoaded', init);
+
+        // ============================================
+        // Service Worker Registration (PWA / Offline)
+        // ============================================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./sw.js').then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch(function(err) {
+                    console.log('Service Worker registration failed:', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
