@@ -2,8 +2,13 @@
 
 A clean, customizable invoice generator that runs entirely in the browser. Built with **Tailwind CSS** and vanilla JavaScript — no build step required.
 
+**🔒 100% Private — No data is sent anywhere. Everything works completely in your browser.**
+
 ## Features
 
+- **Installable PWA** — Add to home screen on mobile or desktop, works like a native app
+- **Works offline** — Full functionality without an internet connection via service worker
+- **100% private** — All data stays on your device, nothing is ever sent to a server
 - **Editable company info** — Click to edit your company name, address, and email
 - **Dynamic line items** — Add/remove invoice line items with automatic calculations
 - **Multi-currency support** — Switch between USD ($), GBP (£), and EUR (€)
@@ -12,11 +17,18 @@ A clean, customizable invoice generator that runs entirely in the browser. Built
 - **Payment instructions** — Built-in section for bank/ACH payment details
 - **Print / PDF export** — Clean print-optimized layout for saving as PDF
 - **Local storage persistence** — Invoice data is saved automatically in the browser
-- **Responsive design** — Works on desktop, tablet, and mobile
+- **Mobile-friendly** — Responsive layout with touch-friendly controls
 
 ## Getting Started
 
 Simply open `index.html` in a browser, or visit the hosted version on GitHub Pages.
+
+### Install as an App
+
+On **mobile**: Open the site in Chrome/Safari → tap "Add to Home Screen"
+On **desktop**: Click the install icon in the browser address bar
+
+The app works fully offline after the first visit.
 
 ### Local Development
 
@@ -43,3 +55,5 @@ To enable:
 - [Google Material Symbols](https://fonts.google.com/icons) — Icon set
 - [Inter](https://fonts.google.com/specimen/Inter) — Typography
 - Vanilla JavaScript — No frameworks, no build step
+- Service Worker — Offline caching for PWA support
+- Web App Manifest — Installable on mobile and desktop
