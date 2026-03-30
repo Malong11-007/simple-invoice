@@ -16,7 +16,7 @@
 		<PrivacyBanner />
 
 		<!-- Invoice Container -->
-		<main class="invoice-container max-w-5xl mx-auto bg-white rounded-2xl shadow-md border border-[#2b3f7f]/10 p-6 md:p-10">
+		<main class="invoice-container max-w-5xl mx-auto bg-white rounded-2xl shadow-md p-6 md:p-10" style="border: 1px solid var(--primary-faint);">
 			<InvoiceHeader />
 			<BillTo />
 			<CurrencySelector />

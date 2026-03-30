@@ -39,7 +39,8 @@
 						type="text"
 						id="title-{item.id}"
 						placeholder="Item title..."
-						class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-2 text-sm font-semibold"
+						class="editable-field w-full rounded-2xl px-4 py-2 text-sm font-semibold"
+						style="background-color: var(--primary-ultralight);"
 						aria-label="Item title"
 						value={item.title}
 						oninput={(e) => handleInput(item.id, 'title', e)}
@@ -49,7 +50,8 @@
 						type="text"
 						id="desc-{item.id}"
 						placeholder="Description..."
-						class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-2 text-sm text-gray-500 mt-1"
+						class="editable-field w-full rounded-2xl px-4 py-2 text-sm text-gray-500 mt-1"
+						style="background-color: var(--primary-ultralight);"
 						aria-label="Item description"
 						value={item.description}
 						oninput={(e) => handleInput(item.id, 'description', e)}
@@ -62,7 +64,8 @@
 						id="qty-{item.id}"
 						min="0"
 						step="1"
-						class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-3 text-sm text-center"
+						class="editable-field w-full rounded-2xl px-4 py-3 text-sm text-center"
+						style="background-color: var(--primary-ultralight);"
 						aria-label="Quantity"
 						value={item.qty}
 						oninput={(e) => handleInput(item.id, 'qty', e)}
@@ -75,7 +78,8 @@
 						id="rate-{item.id}"
 						min="0"
 						step="0.01"
-						class="editable-field w-full bg-[#f8faff] rounded-2xl px-4 py-3 text-sm text-center"
+						class="editable-field w-full rounded-2xl px-4 py-3 text-sm text-center"
+						style="background-color: var(--primary-ultralight);"
 						aria-label="Rate"
 						value={item.rate}
 						oninput={(e) => handleInput(item.id, 'rate', e)}
@@ -99,7 +103,7 @@
 
 	<button
 		onclick={addLineItem}
-		class="mt-6 flex items-center gap-2 text-[#2b3f7f] hover:text-[#223263] font-medium no-print"
+		class="mt-6 flex items-center gap-2 font-medium no-print btn-text-primary"
 	>
 		<span class="material-symbols-outlined">add_circle</span>
 		Add Line Item

@@ -3,9 +3,9 @@
 </script>
 
 <div class="flex-1">
-	<div class="bg-[#f8faff] rounded-2xl p-6 print-bg">
+	<div class="rounded-2xl p-6 print-bg" style="background-color: var(--primary-ultralight);">
 		<h4 class="font-semibold text-gray-700 flex items-center gap-2 mb-4">
-			<span class="material-symbols-outlined text-[#2b3f7f]">account_balance</span>
+			<span class="material-symbols-outlined" style="color: var(--primary);">account_balance</span>
 			Payment Instructions
 		</h4>
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -47,7 +47,8 @@
 			<textarea
 				id="noteField"
 				rows="3"
-				class="w-full bg-white rounded-2xl p-4 text-sm border border-[#81b5f6]/30 focus:outline-none editable-field"
+				class="w-full bg-white rounded-2xl p-4 text-sm focus:outline-none editable-field"
+				style="border: 1px solid var(--accent-border);"
 				placeholder="Enter additional note here..."
 				value={$invoice.note}
 				oninput={(e) => invoice.update((inv) => ({ ...inv, note: (e.currentTarget as HTMLTextAreaElement).value }))}

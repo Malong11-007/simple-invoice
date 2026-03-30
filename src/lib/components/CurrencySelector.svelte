@@ -13,7 +13,8 @@
 		id="currencySelect"
 		value={$invoice.currencySymbol}
 		onchange={handleChange}
-		class="bg-white border border-[#81b5f6]/30 rounded-2xl px-4 py-2 text-sm font-medium focus:outline-none"
+		class="bg-white rounded-2xl px-4 py-2 text-sm font-medium focus:outline-none"
+		style="border: 1px solid var(--accent-border);"
 	>
 		<option value="$">USD ($)</option>
 		<option value="£">GBP (£)</option>
