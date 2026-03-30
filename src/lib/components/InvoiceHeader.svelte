@@ -18,8 +18,8 @@
 <section class="flex flex-col md:flex-row justify-between gap-4 mb-7" id="invoiceHeader">
 	<!-- Left: Icon + Sender Info -->
 	<div>
-		<div class="w-14 h-14 bg-[#eef2ff] rounded-xl flex items-center justify-center mb-2">
-			<span class="material-symbols-outlined text-[#2b3f7f]" style="font-size: 32px;">edit_note</span>
+		<div class="w-14 h-14 rounded-xl flex items-center justify-center mb-2" style="background-color: var(--primary-light);">
+			<span class="material-symbols-outlined" style="font-size: 32px; color: var(--primary);">edit_note</span>
 		</div>
 		<div class="space-y-1">
 			<input
@@ -64,14 +64,15 @@
 
 	<!-- Right: INVOICE title + Details -->
 	<div class="text-right">
-		<h2 class="text-4xl font-bold text-[#2b3f7f] mb-4">INVOICE</h2>
+		<h2 class="text-4xl font-bold mb-4" style="color: var(--primary);">INVOICE</h2>
 		<div class="space-y-2">
 			<div>
-				<label for="invoiceNumber" class="text-xs font-semibold text-[#2b3f7f]/70 uppercase tracking-wider">Invoice Number</label>
+				<label for="invoiceNumber" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Invoice Number</label>
 				<input
 					type="text"
 					id="invoiceNumber"
-					class="editable-field bg-[#f8faff] rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto"
+					class="editable-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto"
+					style="background-color: var(--primary-ultralight);"
 					value={$invoice.invoiceNumber}
 					oninput={(e) => {
 						updateField('invoiceNumber', e.currentTarget.value);
@@ -80,22 +81,24 @@
 				/>
 			</div>
 			<div>
-				<label for="dateIssued" class="text-xs font-semibold text-[#2b3f7f]/70 uppercase tracking-wider">Date Issued</label>
+				<label for="dateIssued" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Date Issued</label>
 				<input
 					type="date"
 					id="dateIssued"
-					class="editable-field bg-[#f8faff] rounded-2xl px-3 py-2 text-sm font-semibold w-40 block ml-auto"
+					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
+					style="background-color: var(--primary-ultralight);"
 					value={$invoice.dateIssued}
 					oninput={(e) => updateField('dateIssued', e.currentTarget.value)}
 				/>
 			</div>
 			{#if $invoice.showDueDate}
 				<div>
-					<label for="dueDate" class="text-xs font-semibold text-[#2b3f7f]/70 uppercase tracking-wider">Due Date</label>
+					<label for="dueDate" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Due Date</label>
 					<input
 						type="date"
 						id="dueDate"
-						class="editable-field bg-[#f8faff] rounded-2xl px-3 py-2 text-sm font-semibold w-40 block ml-auto"
+						class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
+						style="background-color: var(--primary-ultralight);"
 						value={$invoice.dueDate}
 						oninput={(e) => updateField('dueDate', e.currentTarget.value)}
 					/>

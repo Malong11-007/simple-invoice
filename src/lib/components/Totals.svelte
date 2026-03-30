@@ -18,7 +18,7 @@
 </script>
 
 <div class="w-full lg:w-80">
-	<div class="bg-[#f8faff] rounded-2xl p-6 space-y-4">
+	<div class="rounded-2xl p-6 space-y-4" style="background-color: var(--primary-ultralight);">
 		<div class="flex justify-between items-center">
 			<span class="text-sm text-gray-500">Subtotal</span>
 			<span class="text-sm font-semibold text-gray-700">{formatCurrency($subtotal, $invoice.currencySymbol)}</span>
@@ -49,7 +49,8 @@
 						<select
 							value={$invoice.taxRateSelect}
 							onchange={handleTaxRateChange}
-							class="bg-white border border-[#81b5f6]/30 rounded-xl px-3 py-1 text-sm focus:outline-none"
+							class="bg-white rounded-xl px-3 py-1 text-sm focus:outline-none"
+							style="border: 1px solid var(--accent-border);"
 						>
 							<option value="0">0%</option>
 							<option value="5">5%</option>
@@ -63,7 +64,8 @@
 								min="0"
 								max="100"
 								step="0.01"
-								class="w-20 bg-white border border-[#81b5f6]/30 rounded-xl px-3 py-1 text-sm focus:outline-none"
+								class="w-20 bg-white rounded-xl px-3 py-1 text-sm focus:outline-none"
+								style="border: 1px solid var(--accent-border);"
 								placeholder="%"
 								value={$invoice.customTaxRate}
 								oninput={handleCustomTaxChange}
@@ -75,11 +77,11 @@
 			</div>
 		{/if}
 
-		<hr class="border-[#81b5f6]/20" />
+		<hr style="border-color: var(--accent-border);" />
 
 		<div class="flex justify-between items-center">
 			<span class="text-lg font-bold text-gray-800">Total Due</span>
-			<span class="text-lg font-bold text-[#2b3f7f]">{formatCurrency($totalDue, $invoice.currencySymbol)}</span>
+			<span class="text-lg font-bold" style="color: var(--primary);">{formatCurrency($totalDue, $invoice.currencySymbol)}</span>
 		</div>
 	</div>
 </div>

@@ -7,8 +7,8 @@
 </script>
 
 <section class="mt-4 mb-9" id="billToSection">
-	<div class="rounded-2xl bg-[#f8faff] border border-[#2b3f7f]/10 p-4 max-w-sm">
-		<h4 class="text-xs font-semibold text-[#2b3f7f]/70 uppercase tracking-wider mb-3">Bill To</h4>
+	<div class="rounded-2xl p-4 max-w-sm" style="background-color: var(--primary-ultralight); border: 1px solid var(--primary-faint);">
+		<h4 class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--primary-muted);">Bill To</h4>
 		<div class="space-y-1">
 			<input
 				type="text"
