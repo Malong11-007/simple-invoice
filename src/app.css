@@ -1,0 +1,243 @@
+@import 'tailwindcss';
+
+/* ============================================
+   Base Styles
+   ============================================ */
+
+body {
+	font-family: 'Inter', sans-serif;
+	background: #f2f4fa;
+	min-height: 100vh;
+}
+
+.material-symbols-outlined {
+	font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Editable fields styling */
+.editable-field {
+	border: 1px solid transparent;
+	transition: all 0.2s ease;
+}
+.editable-field:hover {
+	border-color: rgba(129, 181, 246, 0.3);
+}
+.editable-field:focus {
+	border-color: rgba(50, 71, 134, 0.5);
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(50, 71, 134, 0.1);
+}
+
+/* Toggle switch */
+.toggle-track {
+	width: 44px;
+	height: 24px;
+	background: #d1d5db;
+	border-radius: 12px;
+	position: relative;
+	cursor: pointer;
+	transition: background 0.3s ease;
+}
+.toggle-track.active {
+	background: #2b3f7f;
+}
+.toggle-thumb {
+	width: 20px;
+	height: 20px;
+	background: white;
+	border-radius: 50%;
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	transition: transform 0.3s ease;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.toggle-track.active .toggle-thumb {
+	transform: translateX(20px);
+}
+
+/* Privacy banner */
+.privacy-banner {
+	background: linear-gradient(90deg, #f8faff, #eef2ff);
+	border: 1px solid rgba(50, 71, 134, 0.14);
+	box-shadow: 0 8px 24px rgba(50, 71, 134, 0.08);
+}
+
+.app-shell {
+	background: #eceff8;
+	border: 1px solid rgba(50, 71, 134, 0.12);
+	border-radius: 1.5rem;
+	box-shadow: 0 24px 50px rgba(17, 24, 39, 0.08);
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+	* {
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+	}
+	@page {
+		margin: 0.4in;
+		size: auto;
+	}
+	body {
+		background: white !important;
+		padding: 0 !important;
+		margin: 0 !important;
+		font-size: 12px !important;
+	}
+	.no-print {
+		display: none !important;
+	}
+	.invoice-container {
+		box-shadow: none !important;
+		border-radius: 0 !important;
+		border: none !important;
+		max-width: 100% !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		background: white !important;
+		-webkit-backdrop-filter: none !important;
+		backdrop-filter: none !important;
+	}
+	.app-shell {
+		background: white !important;
+		border: none !important;
+		box-shadow: none !important;
+		border-radius: 0 !important;
+		max-width: 100% !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+	.editable-field {
+		border: none !important;
+		box-shadow: none !important;
+		padding: 1px 0 !important;
+		background: transparent !important;
+	}
+	input,
+	textarea,
+	select {
+		border: none !important;
+		box-shadow: none !important;
+		background: transparent !important;
+	}
+	input[type='date'] {
+		-webkit-appearance: none !important;
+		appearance: none !important;
+		padding: 1px 0 !important;
+	}
+	.line-item-delete {
+		display: none !important;
+	}
+	#invoiceHeader {
+		display: flex !important;
+		flex-direction: row !important;
+		justify-content: space-between !important;
+		align-items: flex-start !important;
+		margin-bottom: 1rem !important;
+		gap: 1rem !important;
+	}
+	#invoiceHeader .w-14 {
+		width: 2.5rem !important;
+		height: 2.5rem !important;
+		margin-bottom: 0.5rem !important;
+	}
+	#invoiceHeader h2 {
+		font-size: 1.75rem !important;
+		margin-bottom: 0.5rem !important;
+	}
+	#billToSection {
+		margin-bottom: 1rem !important;
+	}
+	#billToSection .rounded-2xl {
+		padding: 0.75rem 1rem !important;
+	}
+	#bottomSection {
+		display: flex !important;
+		flex-direction: row !important;
+		gap: 1rem !important;
+		margin-top: 1rem !important;
+	}
+	#bottomSection > div:first-child {
+		flex: 1 !important;
+	}
+	#bottomSection > div:last-child {
+		width: 250px !important;
+	}
+	.line-header {
+		display: grid !important;
+		grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+		gap: 0.5rem !important;
+		margin-bottom: 0.25rem !important;
+		padding-left: 0.25rem !important;
+		padding-right: 0.25rem !important;
+	}
+	.line-item-row {
+		display: grid !important;
+		grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+		gap: 0.5rem !important;
+		margin-bottom: 0.15rem !important;
+	}
+	.line-item-row input {
+		padding: 0.15rem 0.25rem !important;
+		font-size: 11px !important;
+	}
+	.print-bg {
+		background-color: #f8faff !important;
+		border-radius: 0.5rem !important;
+		padding: 0.75rem !important;
+	}
+	.print-bg .grid {
+		gap: 0.25rem 0.75rem !important;
+	}
+	.print-bg label {
+		margin-bottom: 0 !important;
+		font-size: 10px !important;
+	}
+	.print-bg input {
+		padding: 0.15rem 0.25rem !important;
+		font-size: 11px !important;
+	}
+	.print-bg h4 {
+		margin-bottom: 0.5rem !important;
+		font-size: 12px !important;
+	}
+	.print-bg textarea {
+		padding: 0.25rem !important;
+		font-size: 11px !important;
+		max-height: 2.5rem !important;
+		overflow: hidden !important;
+	}
+	.print-bg .mt-4 {
+		margin-top: 0.25rem !important;
+	}
+	#bottomSection .bg-\[\#f8faff\] {
+		padding: 0.75rem !important;
+	}
+	#bottomSection .space-y-4 > * + * {
+		margin-top: 0.35rem !important;
+	}
+	#lineItems {
+		margin-bottom: 0.5rem !important;
+	}
+}
+
+/* Mobile: stack line items */
+@media (max-width: 640px) {
+	.line-item-row {
+		grid-template-columns: 1fr 1fr;
+		gap: 0.5rem;
+	}
+	.line-item-row .col-span-6 {
+		grid-column: span 2;
+	}
+	.line-item-row .col-span-2 {
+		grid-column: span 1;
+	}
+	.line-header {
+		display: none;
+	}
+}
