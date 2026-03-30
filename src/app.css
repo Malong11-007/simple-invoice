@@ -178,9 +178,18 @@ body {
 		-webkit-appearance: none !important;
 		appearance: none !important;
 		padding: 1px 0 !important;
+		text-align: right !important;
+		min-width: 0 !important;
+		width: 100% !important;
 	}
 	input[type='date']::-webkit-calendar-picker-indicator {
 		display: none !important;
+	}
+	input[type='date']::-webkit-datetime-edit {
+		padding: 0 !important;
+	}
+	input[type='date']::-webkit-datetime-edit-fields-wrapper {
+		padding: 0 !important;
 	}
 	.line-item-delete {
 		display: none !important;
@@ -240,7 +249,7 @@ body {
 		font-size: 11px !important;
 	}
 	.print-bg {
-		background-color: #f8faff !important;
+		background-color: var(--primary-ultralight) !important;
 		border-radius: 0.5rem !important;
 		padding: 0.75rem !important;
 	}
