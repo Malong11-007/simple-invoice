@@ -65,28 +65,9 @@ body {
 	color: var(--primary-dark);
 }
 
-/* Date input: remove calendar picker icon and force right alignment */
+/* Date field (text input used with datepicker) */
 .date-field {
-	-webkit-appearance: none;
-	appearance: none;
-	min-width: 0;
-	text-align: right;
-}
-
-.date-field::-webkit-calendar-picker-indicator {
-	display: none;
-}
-
-.date-field::-webkit-datetime-edit {
-	text-align: right !important;
-	padding-right: 0;
-	padding-left: 0;
-}
-
-.date-field::-webkit-datetime-edit-fields-wrapper {
-	text-align: right !important;
-	justify-content: flex-end;
-	padding: 0;
+	cursor: pointer;
 }
 
 
@@ -179,6 +160,9 @@ body {
 		padding: 1px 0 !important;
 		background: transparent !important;
 	}
+	.datepicker {
+		display: none !important;
+	}
 	input,
 	textarea,
 	select {
@@ -189,21 +173,10 @@ body {
 	textarea {
 		resize: none !important;
 	}
-	input[type='date'] {
-		-webkit-appearance: none !important;
-		appearance: none !important;
+	input[type='text'].date-field {
 		padding: 1px 0 !important;
 		text-align: right !important;
-		min-width: 0 !important;
-	}
-	input[type='date']::-webkit-calendar-picker-indicator {
-		display: none !important;
-	}
-	input[type='date']::-webkit-datetime-edit {
-		padding: 0 !important;
-	}
-	input[type='date']::-webkit-datetime-edit-fields-wrapper {
-		padding: 0 !important;
+		cursor: default !important;
 	}
 	.line-item-delete {
 		display: none !important;

@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { DatePicker } from '@svelte-plugins/datepicker';
 	import { invoice } from '$lib/stores/invoice';
+
+	let isDateIssuedOpen = false;
+	let isDueDateOpen = false;
 
 	function updateField(field: string, value: string) {
 		invoice.update((inv) => ({ ...inv, [field]: value }));
@@ -12,6 +16,34 @@
 
 	function toggleDueDate() {
 		invoice.update((inv) => ({ ...inv, showDueDate: !inv.showDueDate }));
+	}
+
+	// Convert YYYY-MM-DD string to Date object (local time)
+	function parseDate(dateStr: string): Date | null {
+		if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return null;
+		const d = new Date(dateStr + 'T00:00:00');
+		return isNaN(d.getTime()) ? null : d;
+	}
+
+	// Convert Date object or timestamp to YYYY-MM-DD string
+	function toISODate(date: Date | number): string {
+		if (date == null) return '';
+		const d = date instanceof Date ? date : new Date(date);
+		if (isNaN(d.getTime())) return '';
+		const y = d.getFullYear();
+		const m = String(d.getMonth() + 1).padStart(2, '0');
+		const day = String(d.getDate()).padStart(2, '0');
+		return `${y}-${m}-${day}`;
+	}
+
+	// Format a YYYY-MM-DD string as MM/DD/YYYY for display
+	function formatDisplay(dateStr: string): string {
+		if (!dateStr) return '';
+		const d = parseDate(dateStr);
+		if (!d) return dateStr;
+		const m = String(d.getMonth() + 1).padStart(2, '0');
+		const day = String(d.getDate()).padStart(2, '0');
+		return `${m}/${day}/${d.getFullYear()}`;
 	}
 </script>
 
@@ -82,26 +114,48 @@
 			</div>
 			<div>
 				<label for="dateIssued" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Date Issued</label>
-				<input
-					type="date"
-					id="dateIssued"
-					class="editable-field date-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto"
-					style="background-color: var(--primary-ultralight);"
-					value={$invoice.dateIssued}
-					oninput={(e) => updateField('dateIssued', e.currentTarget.value)}
-				/>
+				<DatePicker
+					bind:isOpen={isDateIssuedOpen}
+					startDate={parseDate($invoice.dateIssued)}
+					onDateChange={({ startDate }: { startDate: Date | number }) => updateField('dateIssued', toISODate(startDate))}
+					enableFutureDates={true}
+					align="right"
+					includeFont={false}
+				>
+					<input
+						type="text"
+						id="dateIssued"
+						class="editable-field date-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto cursor-pointer"
+						style="background-color: var(--primary-ultralight);"
+						readonly
+						value={formatDisplay($invoice.dateIssued)}
+						onclick={() => (isDateIssuedOpen = !isDateIssuedOpen)}
+						aria-label="Date Issued"
+					/>
+				</DatePicker>
 			</div>
 			{#if $invoice.showDueDate}
 			<div>
 				<label for="dueDate" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Due Date</label>
-				<input
-					type="date"
-					id="dueDate"
-					class="editable-field date-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto"
-					style="background-color: var(--primary-ultralight);"
-					value={$invoice.dueDate}
-					oninput={(e) => updateField('dueDate', e.currentTarget.value)}
-				/>
+				<DatePicker
+					bind:isOpen={isDueDateOpen}
+					startDate={parseDate($invoice.dueDate)}
+					onDateChange={({ startDate }: { startDate: Date | number }) => updateField('dueDate', toISODate(startDate))}
+					enableFutureDates={true}
+					align="right"
+					includeFont={false}
+				>
+					<input
+						type="text"
+						id="dueDate"
+						class="editable-field date-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto cursor-pointer"
+						style="background-color: var(--primary-ultralight);"
+						readonly
+						value={formatDisplay($invoice.dueDate)}
+						onclick={() => (isDueDateOpen = !isDueDateOpen)}
+						aria-label="Due Date"
+					/>
+				</DatePicker>
 			</div>
 			{/if}
 			<div class="flex items-center justify-end gap-3 no-print">
