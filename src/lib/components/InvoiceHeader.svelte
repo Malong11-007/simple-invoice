@@ -81,28 +81,28 @@
 				/>
 			</div>
 			<div>
-				<label for="dateIssued" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Date Issued</label>
+			<label for="dateIssued" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Date Issued</label>
 				<input
 					type="date"
 					id="dateIssued"
-					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
+					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto text-right"
 					style="background-color: var(--primary-ultralight);"
 					value={$invoice.dateIssued}
 					oninput={(e) => updateField('dateIssued', e.currentTarget.value)}
 				/>
 			</div>
 			{#if $invoice.showDueDate}
-				<div>
-					<label for="dueDate" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Due Date</label>
-					<input
-						type="date"
-						id="dueDate"
-						class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
-						style="background-color: var(--primary-ultralight);"
-						value={$invoice.dueDate}
-						oninput={(e) => updateField('dueDate', e.currentTarget.value)}
-					/>
-				</div>
+			<div>
+				<label for="dueDate" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Due Date</label>
+				<input
+					type="date"
+					id="dueDate"
+					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto text-right"
+					style="background-color: var(--primary-ultralight);"
+					value={$invoice.dueDate}
+					oninput={(e) => updateField('dueDate', e.currentTarget.value)}
+				/>
+			</div>
 			{/if}
 			<div class="flex items-center justify-end gap-3 no-print">
 				<label for="dueDateToggle" class="text-sm text-gray-500 mr-1">Show Due Date</label>
