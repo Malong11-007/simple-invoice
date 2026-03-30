@@ -5,7 +5,7 @@
 	let isDateIssuedOpen = false;
 	let isDueDateOpen = false;
 
-	function updateField(field: string, value: string) {
+	function updateField(field: string, value: string | boolean) {
 		invoice.update((inv) => ({ ...inv, [field]: value }));
 	}
 
@@ -16,6 +16,16 @@
 
 	function toggleDueDate() {
 		invoice.update((inv) => ({ ...inv, showDueDate: !inv.showDueDate }));
+	}
+
+	function restoreSenderFields() {
+		invoice.update((inv) => ({
+			...inv,
+			showFromAddress1: true,
+			showFromAddress2: true,
+			showFromEmail: true,
+			showFromPhone: true
+		}));
 	}
 
 	// Convert YYYY-MM-DD string to Date object (local time)
@@ -61,36 +71,92 @@
 				oninput={(e) => updateField('fromName', e.currentTarget.value)}
 				aria-label="Your Name"
 			/>
-			<input
-				type="text"
-				class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
-				value={$invoice.fromAddress1}
-				oninput={(e) => updateField('fromAddress1', e.currentTarget.value)}
-				aria-label="Your Address"
-			/>
-			<input
-				type="text"
-				class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
-				value={$invoice.fromAddress2}
-				oninput={(e) => updateField('fromAddress2', e.currentTarget.value)}
-				aria-label="Your City and State"
-			/>
-			<div class="mt-2 space-y-1">
+			{#if $invoice.showFromAddress1}
+			<div class="flex items-center gap-1">
 				<input
-					type="email"
-					class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
-					value={$invoice.fromEmail}
-					oninput={(e) => updateField('fromEmail', e.currentTarget.value)}
-					aria-label="Your Email"
+					type="text"
+					class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 flex-1 min-w-0"
+					value={$invoice.fromAddress1}
+					oninput={(e) => updateField('fromAddress1', e.currentTarget.value)}
+					aria-label="Your Address"
 				/>
-				<input
-					type="tel"
-					class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 w-full"
-					value={$invoice.fromPhone}
-					oninput={(e) => updateField('fromPhone', e.currentTarget.value)}
-					aria-label="Your Phone"
-				/>
+				<button
+					class="no-print shrink-0 text-gray-300 hover:text-red-400 transition-colors rounded p-0.5"
+					onclick={() => updateField('showFromAddress1', false)}
+					title="Remove this line"
+					aria-label="Remove address line"
+				>
+					<span class="material-symbols-outlined" style="font-size:15px;">close</span>
+				</button>
 			</div>
+			{/if}
+			{#if $invoice.showFromAddress2}
+			<div class="flex items-center gap-1">
+				<input
+					type="text"
+					class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 flex-1 min-w-0"
+					value={$invoice.fromAddress2}
+					oninput={(e) => updateField('fromAddress2', e.currentTarget.value)}
+					aria-label="Your City and State"
+				/>
+				<button
+					class="no-print shrink-0 text-gray-300 hover:text-red-400 transition-colors rounded p-0.5"
+					onclick={() => updateField('showFromAddress2', false)}
+					title="Remove this line"
+					aria-label="Remove city/state line"
+				>
+					<span class="material-symbols-outlined" style="font-size:15px;">close</span>
+				</button>
+			</div>
+			{/if}
+			{#if $invoice.showFromEmail || $invoice.showFromPhone}
+			<div class="mt-2 space-y-1">
+				{#if $invoice.showFromEmail}
+				<div class="flex items-center gap-1">
+					<input
+						type="email"
+						class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 flex-1 min-w-0"
+						value={$invoice.fromEmail}
+						oninput={(e) => updateField('fromEmail', e.currentTarget.value)}
+						aria-label="Your Email"
+					/>
+					<button
+						class="no-print shrink-0 text-gray-300 hover:text-red-400 transition-colors rounded p-0.5"
+						onclick={() => updateField('showFromEmail', false)}
+						title="Remove this line"
+						aria-label="Remove email line"
+					>
+						<span class="material-symbols-outlined" style="font-size:15px;">close</span>
+					</button>
+				</div>
+				{/if}
+				{#if $invoice.showFromPhone}
+				<div class="flex items-center gap-1">
+					<input
+						type="tel"
+						class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 flex-1 min-w-0"
+						value={$invoice.fromPhone}
+						oninput={(e) => updateField('fromPhone', e.currentTarget.value)}
+						aria-label="Your Phone"
+					/>
+					<button
+						class="no-print shrink-0 text-gray-300 hover:text-red-400 transition-colors rounded p-0.5"
+						onclick={() => updateField('showFromPhone', false)}
+						title="Remove this line"
+						aria-label="Remove phone line"
+					>
+						<span class="material-symbols-outlined" style="font-size:15px;">close</span>
+					</button>
+				</div>
+				{/if}
+			</div>
+			{/if}
+			{#if !$invoice.showFromAddress1 || !$invoice.showFromAddress2 || !$invoice.showFromEmail || !$invoice.showFromPhone}
+			<button
+				class="no-print text-xs text-gray-400 hover:text-gray-600 transition-colors mt-1 block"
+				onclick={restoreSenderFields}
+			>↺ Restore hidden fields</button>
+			{/if}
 		</div>
 	</div>
 
