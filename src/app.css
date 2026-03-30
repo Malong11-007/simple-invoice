@@ -65,24 +65,14 @@ body {
 	color: var(--primary-dark);
 }
 
-/* Date input: auto-size and remove calendar picker icon */
-.date-field {
-	width: fit-content;
-	min-width: 9rem;
-	max-width: 100%;
-}
+/* Date input: remove calendar picker icon and force right alignment */
 .date-field::-webkit-calendar-picker-indicator {
 	display: none;
-}
-/* Force right alignment on date inputs (works better than text-align alone) */
-.date-field {
-	width: 176px;           /* Matches your w-44 invoice number field */
-	text-align: right;
 }
 
 .date-field::-webkit-datetime-edit {
 	text-align: right !important;
-	padding-right: 8px;
+	padding-right: 0;
 }
 
 .date-field::-webkit-datetime-edit-fields-wrapper {
@@ -196,7 +186,6 @@ body {
 		padding: 1px 0 !important;
 		text-align: right !important;
 		min-width: 0 !important;
-		width: 100% !important;
 	}
 	input[type='date']::-webkit-calendar-picker-indicator {
 		display: none !important;
