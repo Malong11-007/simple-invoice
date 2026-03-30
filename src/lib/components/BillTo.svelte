@@ -6,7 +6,7 @@
 	}
 </script>
 
-<section class="mt-4 mb-9" id="billToSection">
+<section class="mt-8 mb-10" id="billToSection">
 	<div class="rounded-2xl p-4 max-w-sm" style="background-color: var(--primary-ultralight); border: 1px solid var(--primary-faint);">
 		<h4 class="text-xs font-semibold uppercase tracking-wider mb-3" style="color: var(--primary-muted);">Bill To</h4>
 		<div class="space-y-1">
