@@ -131,6 +131,10 @@ body {
 		margin: 0 !important;
 		font-size: 12px !important;
 	}
+	body > div {
+		padding: 0 !important;
+		margin: 0 !important;
+	}
 	.no-print {
 		display: none !important;
 	}
@@ -160,7 +164,7 @@ body {
 		padding: 1px 0 !important;
 		background: transparent !important;
 	}
-	.datepicker {
+	.datepicker .calendars-container {
 		display: none !important;
 	}
 	input,
@@ -199,8 +203,8 @@ body {
 		margin-bottom: 0.5rem !important;
 	}
 	#billToSection {
-		margin-top: 1.25rem !important;
-		margin-bottom: 1.75rem !important;
+		margin-top: 0.75rem !important;
+		margin-bottom: 1rem !important;
 	}
 	#billToSection .rounded-2xl {
 		padding: 0.75rem 1rem !important;
@@ -272,8 +276,8 @@ body {
 		margin-top: 0.35rem !important;
 	}
 	#lineItemsSection {
-		margin-top: 0.75rem !important;
-		margin-bottom: 1.75rem !important;
+		margin-top: 0.5rem !important;
+		margin-bottom: 1rem !important;
 	}
 	#lineItems {
 		margin-bottom: 0.5rem !important;
