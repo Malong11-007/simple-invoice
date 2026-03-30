@@ -75,18 +75,18 @@
 					style="background-color: var(--primary-ultralight);"
 					value={$invoice.invoiceNumber}
 					oninput={(e) => {
-						updateField('invoiceNumber', e.currentTarget.value);
-						updateMemo();
+					updateField('invoiceNumber', e.currentTarget.value);
+					updateMemo();
 					}}
 				/>
 			</div>
 			<div>
-			<label for="dateIssued" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Date Issued</label>
+				<label for="dateIssued" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Date Issued</label>
 				<input
 					type="date"
 					id="dateIssued"
-					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto text-right"
-					style="background-color: var(--primary-ultralight);"
+					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
+					style="background-color: var(--primary-ultralight); text-align: right;"
 					value={$invoice.dateIssued}
 					oninput={(e) => updateField('dateIssued', e.currentTarget.value)}
 				/>
@@ -97,8 +97,8 @@
 				<input
 					type="date"
 					id="dueDate"
-					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto text-right"
-					style="background-color: var(--primary-ultralight);"
+					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
+					style="background-color: var(--primary-ultralight); text-align: right;"
 					value={$invoice.dueDate}
 					oninput={(e) => updateField('dueDate', e.currentTarget.value)}
 				/>
