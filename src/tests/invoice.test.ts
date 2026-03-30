@@ -33,7 +33,17 @@ describe('invoice store', () => {
 			billToContact: 'Contact Person',
 			billToAddress1: 'Client Address',
 			billToAddress2: 'Client City, CS 67890',
-			billToEmail: 'client@test.com'
+			billToEmail: 'client@test.com',
+			showFromAddress1: true,
+			showFromAddress2: true,
+			showFromEmail: true,
+			showFromPhone: true,
+			showBillToContact: true,
+			showBillToAddress1: true,
+			showBillToAddress2: true,
+			showBillToEmail: true,
+			showPaymentMemo: true,
+			showPaymentNote: true
 		});
 		lineItems.set([{ id: 1, title: '', description: '', qty: 1, rate: 0 }]);
 	});

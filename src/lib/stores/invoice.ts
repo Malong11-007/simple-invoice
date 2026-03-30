@@ -2,6 +2,7 @@ import { writable, derived, get } from 'svelte/store';
 import { browser } from '$app/environment';
 
 const STORAGE_KEY = 'editorialLedger';
+const PAYMENT_FIELDS_KEY = 'editorialLedger_payment';
 
 // ============================================
 // Types
@@ -13,6 +14,12 @@ export interface LineItem {
 	description: string;
 	qty: number;
 	rate: number;
+}
+
+export interface PaymentField {
+	id: string;
+	label: string;
+	value: string;
 }
 
 export interface InvoiceData {
@@ -35,6 +42,19 @@ export interface InvoiceData {
 	billToAddress1: string;
 	billToAddress2: string;
 	billToEmail: string;
+	// Visibility flags – sender info
+	showFromAddress1: boolean;
+	showFromAddress2: boolean;
+	showFromEmail: boolean;
+	showFromPhone: boolean;
+	// Visibility flags – bill-to
+	showBillToContact: boolean;
+	showBillToAddress1: boolean;
+	showBillToAddress2: boolean;
+	showBillToEmail: boolean;
+	// Visibility flags – payment section
+	showPaymentMemo: boolean;
+	showPaymentNote: boolean;
 }
 
 // ============================================
@@ -67,7 +87,18 @@ function getDefaults(): InvoiceData {
 		billToContact: 'Contact Person',
 		billToAddress1: 'Company Address',
 		billToAddress2: 'City, State 12345',
-		billToEmail: 'billing@company.com'
+		billToEmail: 'billing@company.com',
+		// Visibility defaults – all shown
+		showFromAddress1: true,
+		showFromAddress2: true,
+		showFromEmail: true,
+		showFromPhone: true,
+		showBillToContact: true,
+		showBillToAddress1: true,
+		showBillToAddress2: true,
+		showBillToEmail: true,
+		showPaymentMemo: true,
+		showPaymentNote: true
 	};
 }
 
@@ -163,4 +194,57 @@ if (browser) {
 			// Storage not available
 		}
 	});
+}
+
+// ============================================
+// Payment fields store (dynamic, persisted)
+// ============================================
+
+const DEFAULT_PAYMENT_FIELDS: PaymentField[] = [
+	{ id: 'bankName', label: 'Bank Name', value: '' },
+	{ id: 'accountHolder', label: 'Account Holder', value: '' },
+	{ id: 'routingNumber', label: 'Routing Number', value: '' },
+	{ id: 'accountNumber', label: 'Account Number', value: '' },
+	{ id: 'accountType', label: 'Account Type', value: '' }
+];
+
+function loadPaymentFields(): PaymentField[] {
+	if (!browser) return DEFAULT_PAYMENT_FIELDS;
+	try {
+		const saved = localStorage.getItem(PAYMENT_FIELDS_KEY);
+		if (!saved) return DEFAULT_PAYMENT_FIELDS;
+		const parsed = JSON.parse(saved);
+		return Array.isArray(parsed) ? parsed : DEFAULT_PAYMENT_FIELDS;
+	} catch {
+		return DEFAULT_PAYMENT_FIELDS;
+	}
+}
+
+export const paymentFields = writable<PaymentField[]>(loadPaymentFields());
+
+if (browser) {
+	paymentFields.subscribe(($fields) => {
+		try {
+			localStorage.setItem(PAYMENT_FIELDS_KEY, JSON.stringify($fields));
+		} catch {
+			// Storage not available
+		}
+	});
+}
+
+export function addPaymentField(): void {
+	paymentFields.update((fields) => [
+		...fields,
+		{ id: `custom_${Date.now()}`, label: 'New Field', value: '' }
+	]);
+}
+
+export function removePaymentField(id: string): void {
+	paymentFields.update((fields) => fields.filter((f) => f.id !== id));
+}
+
+export function updatePaymentField(id: string, key: 'label' | 'value', value: string): void {
+	paymentFields.update((fields) =>
+		fields.map((f) => (f.id === id ? { ...f, [key]: value } : f))
+	);
 }
