@@ -193,11 +193,7 @@ body {
 		margin-bottom: 1rem !important;
 		gap: 1rem !important;
 	}
-	#invoiceHeader .w-14 {
-		width: 2.5rem !important;
-		height: 2.5rem !important;
-		margin-bottom: 0.5rem !important;
-	}
+
 	#invoiceHeader h2 {
 		font-size: 1.75rem !important;
 		margin-bottom: 0.5rem !important;

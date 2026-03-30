@@ -1,8 +1,10 @@
 import { writable, derived, get } from 'svelte/store';
 import { browser } from '$app/environment';
+import { generateInitialInvoiceNumber, generateNextInvoiceNumber, getInitialFromName } from '$lib/utils/invoiceNumber';
 
 const STORAGE_KEY = 'editorialLedger';
 const PAYMENT_FIELDS_KEY = 'editorialLedger_payment';
+const LAST_INVOICE_KEY = 'editorialLedger_lastInvoice';
 
 // ============================================
 // Types
@@ -67,9 +69,10 @@ function getDefaults(): InvoiceData {
 	const due = new Date(today);
 	due.setDate(due.getDate() + 30);
 	const dueStr = due.toISOString().split('T')[0];
+	const defaultName = 'Your Name';
 
 	return {
-		invoiceNumber: 'INV-Y2403-001',
+		invoiceNumber: generateInitialInvoiceNumber(defaultName),
 		dateIssued: todayStr,
 		dueDate: dueStr,
 		currencySymbol: '$',
@@ -78,7 +81,7 @@ function getDefaults(): InvoiceData {
 		taxRateSelect: '0',
 		customTaxRate: '',
 		note: 'Payment is due upon receipt. Please include the invoice number as a reference with your payment.',
-		fromName: 'Your Name',
+		fromName: defaultName,
 		fromAddress1: '123 Street Address',
 		fromAddress2: 'City, State 12345',
 		fromEmail: 'your@email.com',
@@ -180,6 +183,60 @@ export function updateLineItem(id: number, field: keyof LineItem, value: string 
 			return { ...item, [field]: value };
 		})
 	);
+}
+
+/**
+ * Create a new invoice with auto-incremented number.
+ * Saves the current invoice number as the "last" before generating the next one.
+ * Resets line items and dates while preserving sender/payment info.
+ */
+export function newInvoice(): void {
+	const current = get(invoice);
+
+	// Save current invoice number as the last generated one
+	if (browser) {
+		try {
+			localStorage.setItem(LAST_INVOICE_KEY, current.invoiceNumber);
+		} catch {
+			// Storage not available
+		}
+	}
+
+	const nextNumber = generateNextInvoiceNumber(current.invoiceNumber, current.fromName);
+	const today = new Date();
+	const todayStr = today.toISOString().split('T')[0];
+	const due = new Date(today);
+	due.setDate(due.getDate() + 30);
+	const dueStr = due.toISOString().split('T')[0];
+
+	invoice.update((inv) => ({
+		...inv,
+		invoiceNumber: nextNumber,
+		dateIssued: todayStr,
+		dueDate: dueStr,
+		billToCompany: 'Client Company Name',
+		billToContact: 'Contact Person',
+		billToAddress1: 'Company Address',
+		billToAddress2: 'City, State 12345',
+		billToEmail: 'billing@company.com',
+		note: 'Payment is due upon receipt. Please include the invoice number as a reference with your payment.'
+	}));
+
+	// Reset line items
+	lineItems.set([{ id: nextId++, title: '', description: '', qty: 1, rate: 0 }]);
+}
+
+/**
+ * Update the invoice number initial when the from-name changes.
+ * Only updates if the current invoice number follows the expected format.
+ */
+export function updateInvoiceInitial(newName: string): void {
+	const initial = getInitialFromName(newName);
+	invoice.update((inv) => {
+		const match = inv.invoiceNumber.match(/^(INV-)([A-Z])(\d{6}-\d{3,})$/);
+		if (!match) return inv;
+		return { ...inv, invoiceNumber: `${match[1]}${initial}${match[3]}` };
+	});
 }
 
 // ============================================

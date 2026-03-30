@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { DatePicker } from '@svelte-plugins/datepicker';
-	import { invoice } from '$lib/stores/invoice';
+	import { invoice, updateInvoiceInitial } from '$lib/stores/invoice';
 
 	let isDateIssuedOpen = false;
 	let isDueDateOpen = false;
 
 	function updateField(field: string, value: string | boolean) {
 		invoice.update((inv) => ({ ...inv, [field]: value }));
+	}
+
+	function updateFromName(value: string) {
+		invoice.update((inv) => ({ ...inv, fromName: value }));
+		updateInvoiceInitial(value);
 	}
 
 	function updateMemo() {
@@ -60,7 +65,7 @@
 <section class="flex flex-col md:flex-row justify-between gap-4 mb-7" id="invoiceHeader">
 	<!-- Left: Icon + Sender Info -->
 	<div>
-		<div class="w-14 h-14 rounded-xl flex items-center justify-center mb-2" style="background-color: var(--primary-light);">
+		<div class="w-14 h-14 rounded-xl flex items-center justify-center mb-2 no-print" style="background-color: var(--primary-light);">
 			<span class="material-symbols-outlined" style="font-size: 32px; color: var(--primary);">edit_note</span>
 		</div>
 		<div class="space-y-1">
@@ -68,7 +73,7 @@
 				type="text"
 				class="editable-field block text-lg font-bold text-gray-800 bg-transparent rounded-lg px-2 py-0.5 w-full"
 				value={$invoice.fromName}
-				oninput={(e) => updateField('fromName', e.currentTarget.value)}
+				oninput={(e) => updateFromName(e.currentTarget.value)}
 				aria-label="Your Name"
 			/>
 			{#if $invoice.showFromAddress1}
