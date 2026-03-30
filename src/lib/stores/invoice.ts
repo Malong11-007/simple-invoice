@@ -1,6 +1,6 @@
 import { writable, derived, get } from 'svelte/store';
 import { browser } from '$app/environment';
-import { generateInitialInvoiceNumber, generateNextInvoiceNumber, getInitialFromName } from '$lib/utils/invoiceNumber';
+import { generateInitialInvoiceNumber, generateNextInvoiceNumber, getInitialFromName, parseInvoiceNumber } from '$lib/utils/invoiceNumber';
 
 const STORAGE_KEY = 'editorialLedger';
 const PAYMENT_FIELDS_KEY = 'editorialLedger_payment';
@@ -63,6 +63,16 @@ export interface InvoiceData {
 // Default values
 // ============================================
 
+const DEFAULT_BILL_TO = {
+	billToCompany: 'Client Company Name',
+	billToContact: 'Contact Person',
+	billToAddress1: 'Company Address',
+	billToAddress2: 'City, State 12345',
+	billToEmail: 'billing@company.com'
+};
+
+const DEFAULT_NOTE = 'Payment is due upon receipt. Please include the invoice number as a reference with your payment.';
+
 function getDefaults(): InvoiceData {
 	const today = new Date();
 	const todayStr = today.toISOString().split('T')[0];
@@ -80,17 +90,13 @@ function getDefaults(): InvoiceData {
 		includeTax: false,
 		taxRateSelect: '0',
 		customTaxRate: '',
-		note: 'Payment is due upon receipt. Please include the invoice number as a reference with your payment.',
+		note: DEFAULT_NOTE,
 		fromName: defaultName,
 		fromAddress1: '123 Street Address',
 		fromAddress2: 'City, State 12345',
 		fromEmail: 'your@email.com',
 		fromPhone: '+1 (555) 000-0000',
-		billToCompany: 'Client Company Name',
-		billToContact: 'Contact Person',
-		billToAddress1: 'Company Address',
-		billToAddress2: 'City, State 12345',
-		billToEmail: 'billing@company.com',
+		...DEFAULT_BILL_TO,
 		// Visibility defaults – all shown
 		showFromAddress1: true,
 		showFromAddress2: true,
@@ -214,12 +220,8 @@ export function newInvoice(): void {
 		invoiceNumber: nextNumber,
 		dateIssued: todayStr,
 		dueDate: dueStr,
-		billToCompany: 'Client Company Name',
-		billToContact: 'Contact Person',
-		billToAddress1: 'Company Address',
-		billToAddress2: 'City, State 12345',
-		billToEmail: 'billing@company.com',
-		note: 'Payment is due upon receipt. Please include the invoice number as a reference with your payment.'
+		...DEFAULT_BILL_TO,
+		note: DEFAULT_NOTE
 	}));
 
 	// Reset line items
@@ -233,9 +235,10 @@ export function newInvoice(): void {
 export function updateInvoiceInitial(newName: string): void {
 	const initial = getInitialFromName(newName);
 	invoice.update((inv) => {
-		const match = inv.invoiceNumber.match(/^(INV-)([A-Z])(\d{6}-\d{3,})$/);
-		if (!match) return inv;
-		return { ...inv, invoiceNumber: `${match[1]}${initial}${match[3]}` };
+		const parsed = parseInvoiceNumber(inv.invoiceNumber);
+		if (!parsed) return inv;
+		const seqStr = String(parsed.sequence).padStart(3, '0');
+		return { ...inv, invoiceNumber: `INV-${initial}${parsed.yearMonth}-${seqStr}` };
 	});
 }
 
