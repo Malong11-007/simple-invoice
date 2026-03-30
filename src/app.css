@@ -66,6 +66,13 @@ body {
 }
 
 /* Date input: remove calendar picker icon and force right alignment */
+.date-field {
+	-webkit-appearance: none;
+	appearance: none;
+	min-width: 0;
+	text-align: right;
+}
+
 .date-field::-webkit-calendar-picker-indicator {
 	display: none;
 }
@@ -73,11 +80,13 @@ body {
 .date-field::-webkit-datetime-edit {
 	text-align: right !important;
 	padding-right: 0;
+	padding-left: 0;
 }
 
 .date-field::-webkit-datetime-edit-fields-wrapper {
 	text-align: right !important;
 	justify-content: flex-end;
+	padding: 0;
 }
 
 
