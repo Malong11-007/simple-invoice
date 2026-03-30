@@ -63,16 +63,16 @@
 	</div>
 
 	<!-- Right: INVOICE title + Details -->
-	<div class="text-right">
-		<h2 class="text-4xl font-bold mb-4" style="color: var(--primary);">INVOICE</h2>
-		<div class="space-y-2">
+	<div class="text-center">
+		<h2 class="text-5xl font-extrabold mb-6" style="color: var(--primary);">INVOICE</h2>
+		<div class="space-y-3">
 			<div>
 				<label for="invoiceNumber" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Invoice Number</label>
 				<input
 					type="text"
 					id="invoiceNumber"
-					class="editable-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto"
-					style="background-color: var(--primary-ultralight);"
+					class="editable-field block mx-auto px-2 py-1 text-2xl font-bold text-center bg-transparent"
+					style="color: var(--primary-dark);"
 					value={$invoice.invoiceNumber}
 					oninput={(e) => {
 						updateField('invoiceNumber', e.currentTarget.value);
@@ -85,8 +85,8 @@
 				<input
 					type="date"
 					id="dateIssued"
-					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
-					style="background-color: var(--primary-ultralight);"
+					class="editable-field date-field block mx-auto px-2 py-1 text-2xl font-bold text-center bg-transparent"
+					style="color: var(--primary);"
 					value={$invoice.dateIssued}
 					oninput={(e) => updateField('dateIssued', e.currentTarget.value)}
 				/>
@@ -97,14 +97,14 @@
 					<input
 						type="date"
 						id="dueDate"
-						class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
-						style="background-color: var(--primary-ultralight);"
+						class="editable-field date-field block mx-auto px-2 py-1 text-2xl font-bold text-center bg-transparent"
+						style="color: var(--primary);"
 						value={$invoice.dueDate}
 						oninput={(e) => updateField('dueDate', e.currentTarget.value)}
 					/>
 				</div>
 			{/if}
-			<div class="flex items-center justify-end gap-3 no-print">
+			<div class="flex items-center justify-center gap-3 no-print">
 				<label for="dueDateToggle" class="text-sm text-gray-500 mr-1">Show Due Date</label>
 				<!-- svelte-ignore a11y_no_static_element_interactions -->
 				<div

@@ -178,7 +178,7 @@ body {
 		-webkit-appearance: none !important;
 		appearance: none !important;
 		padding: 1px 0 !important;
-		text-align: right !important;
+		text-align: center !important;
 		min-width: 0 !important;
 		width: 100% !important;
 	}
