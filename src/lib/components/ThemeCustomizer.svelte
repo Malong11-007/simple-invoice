@@ -10,7 +10,7 @@
 	}
 </script>
 
-<div class="flex flex-wrap gap-6">
+<div class="flex flex-col gap-4">
 	<!-- Color Themes -->
 	<div>
 		<p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Color Theme</p>
@@ -28,7 +28,7 @@
 					aria-pressed={$themeSettings.themeId === theme.id}
 				>
 					<span
-						class="inline-block w-3 h-3 rounded-full flex-shrink-0"
+						class="inline-block w-3.5 h-3.5 rounded-full flex-shrink-0 ring-1 ring-black/10"
 						style="background-color: {theme.swatch};"
 					></span>
 					{theme.name}

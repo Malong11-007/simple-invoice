@@ -1,8 +1,13 @@
 <script lang="ts">
 	import ThemeCustomizer from './ThemeCustomizer.svelte';
+	import { newInvoice } from '$lib/stores/invoice';
 
 	function handlePrint() {
 		window.print();
+	}
+
+	function handleNewInvoice() {
+		newInvoice();
 	}
 
 	let showCustomizer = $state(false);
@@ -15,7 +20,16 @@
 			<h1 class="text-lg font-bold text-gray-700">The Editorial Ledger</h1>
 		</div>
 
-		<div class="flex items-center gap-3">
+		<div class="flex items-center gap-2 sm:gap-3">
+			<button
+				onclick={handleNewInvoice}
+				class="border px-4 py-2 rounded-xl text-sm font-medium transition-all inline-flex items-center gap-2 text-gray-600 hover:bg-gray-50"
+				style="border-color: var(--primary-faint);"
+				title="Create a new invoice with auto-incremented number"
+			>
+				<span class="material-symbols-outlined" style="font-size:18px; color: var(--primary);">add_circle</span>
+				<span class="hidden sm:inline">New Invoice</span>
+			</button>
 			<button
 				onclick={() => (showCustomizer = !showCustomizer)}
 				class="border px-4 py-2 rounded-xl text-sm font-medium transition-all inline-flex items-center gap-2 text-gray-600 hover:bg-gray-50"

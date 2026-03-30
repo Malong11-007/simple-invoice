@@ -138,6 +138,86 @@ export const THEMES: Theme[] = [
 			bodyBg: '#fdf6e3',
 			shellBg: '#f7ecce'
 		}
+	},
+	{
+		id: 'ocean',
+		name: 'Ocean',
+		swatch: '#0e7490',
+		colors: {
+			primary: '#0e7490',
+			primaryDark: '#0c5e73',
+			primaryLight: '#cffafe',
+			primaryUltralight: '#ecfeff',
+			primaryFaint: 'rgba(14,116,144,0.12)',
+			primaryMuted: 'rgba(14,116,144,0.70)',
+			accentBorder: 'rgba(34,211,238,0.30)',
+			bodyBg: '#f0fafb',
+			shellBg: '#e4f5f7'
+		}
+	},
+	{
+		id: 'rose',
+		name: 'Rose',
+		swatch: '#be185d',
+		colors: {
+			primary: '#be185d',
+			primaryDark: '#9d174d',
+			primaryLight: '#fce7f3',
+			primaryUltralight: '#fdf2f8',
+			primaryFaint: 'rgba(190,24,93,0.12)',
+			primaryMuted: 'rgba(190,24,93,0.70)',
+			accentBorder: 'rgba(244,114,182,0.30)',
+			bodyBg: '#fdf2f8',
+			shellBg: '#f9e6f0'
+		}
+	},
+	{
+		id: 'charcoal',
+		name: 'Charcoal',
+		swatch: '#374151',
+		colors: {
+			primary: '#374151',
+			primaryDark: '#1f2937',
+			primaryLight: '#e5e7eb',
+			primaryUltralight: '#f3f4f6',
+			primaryFaint: 'rgba(55,65,81,0.12)',
+			primaryMuted: 'rgba(55,65,81,0.70)',
+			accentBorder: 'rgba(156,163,175,0.30)',
+			bodyBg: '#f3f4f6',
+			shellBg: '#e9eaed'
+		}
+	},
+	{
+		id: 'teal',
+		name: 'Teal',
+		swatch: '#0f766e',
+		colors: {
+			primary: '#0f766e',
+			primaryDark: '#115e59',
+			primaryLight: '#ccfbf1',
+			primaryUltralight: '#f0fdfa',
+			primaryFaint: 'rgba(15,118,110,0.12)',
+			primaryMuted: 'rgba(15,118,110,0.70)',
+			accentBorder: 'rgba(45,212,191,0.30)',
+			bodyBg: '#f0fdf9',
+			shellBg: '#e2f8f4'
+		}
+	},
+	{
+		id: 'sunset',
+		name: 'Sunset',
+		swatch: '#c2410c',
+		colors: {
+			primary: '#c2410c',
+			primaryDark: '#9a3412',
+			primaryLight: '#ffedd5',
+			primaryUltralight: '#fff7ed',
+			primaryFaint: 'rgba(194,65,12,0.12)',
+			primaryMuted: 'rgba(194,65,12,0.70)',
+			accentBorder: 'rgba(251,146,60,0.30)',
+			bodyBg: '#fef6ee',
+			shellBg: '#fdebd6'
+		}
 	}
 ];
 
@@ -170,6 +250,24 @@ export const FONTS: FontOption[] = [
 		name: 'Playfair',
 		stack: "'Playfair Display', serif",
 		googleParam: 'Playfair+Display:wght@400;500;600;700'
+	},
+	{
+		id: 'opensans',
+		name: 'Open Sans',
+		stack: "'Open Sans', sans-serif",
+		googleParam: 'Open+Sans:wght@300;400;500;600;700'
+	},
+	{
+		id: 'merriweather',
+		name: 'Merriweather',
+		stack: "'Merriweather', serif",
+		googleParam: 'Merriweather:wght@300;400;700'
+	},
+	{
+		id: 'sourcesans',
+		name: 'Source Sans',
+		stack: "'Source Sans 3', sans-serif",
+		googleParam: 'Source+Sans+3:wght@300;400;500;600;700'
 	}
 ];
 
