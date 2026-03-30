@@ -65,11 +65,14 @@ body {
 	color: var(--primary-dark);
 }
 
-/* Date input: auto-size to remove excess gap before the calendar icon */
+/* Date input: auto-size and remove calendar picker icon */
 .date-field {
 	width: fit-content;
 	min-width: 9rem;
 	max-width: 100%;
+}
+.date-field::-webkit-calendar-picker-indicator {
+	display: none;
 }
 
 /* Toggle switch */
@@ -176,6 +179,9 @@ body {
 		appearance: none !important;
 		padding: 1px 0 !important;
 	}
+	input[type='date']::-webkit-calendar-picker-indicator {
+		display: none !important;
+	}
 	.line-item-delete {
 		display: none !important;
 	}
@@ -197,7 +203,8 @@ body {
 		margin-bottom: 0.5rem !important;
 	}
 	#billToSection {
-		margin-bottom: 1rem !important;
+		margin-top: 1.25rem !important;
+		margin-bottom: 1.75rem !important;
 	}
 	#billToSection .rounded-2xl {
 		padding: 0.75rem 1rem !important;
@@ -267,6 +274,10 @@ body {
 	}
 	#bottomSection .space-y-4 > * + * {
 		margin-top: 0.35rem !important;
+	}
+	#lineItemsSection {
+		margin-top: 0.75rem !important;
+		margin-bottom: 1.75rem !important;
 	}
 	#lineItems {
 		margin-bottom: 0.5rem !important;

@@ -22,7 +22,7 @@
 	}
 </script>
 
-<section class="mb-7">
+<section class="mt-4 mb-10" id="lineItemsSection">
 	<div class="line-header grid grid-cols-12 gap-3 text-sm font-semibold text-gray-500 px-3 mb-3">
 		<div class="col-span-6">Item</div>
 		<div class="col-span-2 text-center">Qty</div>
