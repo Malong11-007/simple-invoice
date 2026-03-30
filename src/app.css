@@ -180,9 +180,16 @@ body {
 		padding: 1px 0 !important;
 		text-align: right !important;
 		min-width: 0 !important;
+		width: 100% !important;
 	}
 	input[type='date']::-webkit-calendar-picker-indicator {
 		display: none !important;
+	}
+	input[type='date']::-webkit-datetime-edit {
+		padding: 0 !important;
+	}
+	input[type='date']::-webkit-datetime-edit-fields-wrapper {
+		padding: 0 !important;
 	}
 	.line-item-delete {
 		display: none !important;
