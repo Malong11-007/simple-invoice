@@ -74,6 +74,22 @@ body {
 .date-field::-webkit-calendar-picker-indicator {
 	display: none;
 }
+/* Force right alignment on date inputs (works better than text-align alone) */
+.date-field {
+	width: 176px;           /* Matches your w-44 invoice number field */
+	text-align: right;
+}
+
+.date-field::-webkit-datetime-edit {
+	text-align: right !important;
+	padding-right: 8px;
+}
+
+.date-field::-webkit-datetime-edit-fields-wrapper {
+	text-align: right !important;
+	justify-content: flex-end;
+}
+
 
 /* Toggle switch */
 .toggle-track {

@@ -86,7 +86,7 @@
 					type="date"
 					id="dateIssued"
 					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
-					style="background-color: var(--primary-ultralight); text-align: right;"
+					style="background-color: var(--primary-ultralight);"
 					value={$invoice.dateIssued}
 					oninput={(e) => updateField('dateIssued', e.currentTarget.value)}
 				/>
@@ -98,7 +98,7 @@
 					type="date"
 					id="dueDate"
 					class="editable-field date-field rounded-2xl px-3 py-2 text-sm font-semibold block ml-auto"
-					style="background-color: var(--primary-ultralight); text-align: right;"
+					style="background-color: var(--primary-ultralight);"
 					value={$invoice.dueDate}
 					oninput={(e) => updateField('dueDate', e.currentTarget.value)}
 				/>
