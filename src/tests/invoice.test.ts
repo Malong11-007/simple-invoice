@@ -18,6 +18,7 @@ describe('invoice store', () => {
 			invoiceNumber: 'INV-TEST-001',
 			dateIssued: '2024-01-01',
 			dueDate: '2024-01-31',
+			dateFormat: 'us',
 			currencySymbol: '$',
 			showDueDate: true,
 			includeTax: false,
