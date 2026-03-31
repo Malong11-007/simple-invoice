@@ -3,8 +3,15 @@
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { currentTheme, currentFont, FONTS } from '$lib/stores/theme';
+	import { invoice } from '$lib/stores/invoice';
 
 	let { children } = $props();
+
+	const pageTitle = $derived(
+		$invoice.fromName
+			? `${$invoice.fromName} — Simple Invoice Generator`
+			: 'Simple Invoice Generator'
+	);
 
 	onMount(() => {
 		if ('serviceWorker' in navigator) {
@@ -50,7 +57,7 @@
 </script>
 
 <svelte:head>
-	<title>The Editorial Ledger — Simple Invoice Generator</title>
+	<title>{pageTitle}</title>
 </svelte:head>
 
 {@render children()}
