@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ThemeCustomizer from './ThemeCustomizer.svelte';
-	import { newInvoice } from '$lib/stores/invoice';
+	import { newInvoice, invoice } from '$lib/stores/invoice';
 
 	function handlePrint() {
 		window.print();
@@ -17,7 +17,14 @@
 	<div class="flex flex-wrap items-center justify-between gap-4">
 		<div class="flex items-center gap-2.5">
 			<span class="material-symbols-outlined" style="font-size: 22px; color: var(--primary);">edit_note</span>
-			<h1 class="text-lg font-bold text-gray-700">The Editorial Ledger</h1>
+			<input
+				type="text"
+				class="text-lg font-bold text-gray-700 bg-transparent border-none outline-none focus:ring-2 focus:ring-offset-1 rounded px-1 min-w-48 w-auto"
+				value={$invoice.pageTitle}
+				oninput={(e) => invoice.update((inv) => ({ ...inv, pageTitle: (e.target as HTMLInputElement).value }))}
+				aria-label="Page title"
+				placeholder="Simple Invoice Generator"
+			/>
 		</div>
 
 		<div class="flex items-center gap-2 sm:gap-3">

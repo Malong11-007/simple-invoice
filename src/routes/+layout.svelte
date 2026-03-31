@@ -7,11 +7,7 @@
 
 	let { children } = $props();
 
-	const pageTitle = $derived(
-		$invoice.fromName
-			? `${$invoice.fromName} — Simple Invoice Generator`
-			: 'Simple Invoice Generator'
-	);
+	const pageTitle = $derived($invoice.pageTitle || 'Simple Invoice Generator');
 
 	onMount(() => {
 		if ('serviceWorker' in navigator) {
