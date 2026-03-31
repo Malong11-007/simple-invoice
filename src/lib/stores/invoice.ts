@@ -26,6 +26,7 @@ export interface PaymentField {
 }
 
 export interface InvoiceData {
+	pageTitle: string;
 	invoiceNumber: string;
 	dateIssued: string;
 	dueDate: string;
@@ -84,6 +85,7 @@ function getDefaults(): InvoiceData {
 	const defaultName = 'Your Name';
 
 	return {
+		pageTitle: 'Simple Invoice Generator',
 		invoiceNumber: generateInitialInvoiceNumber(defaultName),
 		dateIssued: todayStr,
 		dueDate: dueStr,

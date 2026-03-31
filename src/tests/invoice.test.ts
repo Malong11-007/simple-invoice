@@ -15,6 +15,7 @@ describe('invoice store', () => {
 	beforeEach(() => {
 		// Reset to defaults
 		invoice.set({
+			pageTitle: 'Simple Invoice Generator',
 			invoiceNumber: 'INV-TEST-001',
 			dateIssued: '2024-01-01',
 			dueDate: '2024-01-31',
