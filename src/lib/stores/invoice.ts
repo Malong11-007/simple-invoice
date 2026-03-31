@@ -1,6 +1,7 @@
 import { writable, derived, get } from 'svelte/store';
 import { browser } from '$app/environment';
 import { generateInitialInvoiceNumber, generateNextInvoiceNumber, getInitialFromName, parseInvoiceNumber } from '$lib/utils/invoiceNumber';
+import type { DateFormatId } from '$lib/utils/currency';
 
 const STORAGE_KEY = 'editorialLedger';
 const PAYMENT_FIELDS_KEY = 'editorialLedger_payment';
@@ -28,6 +29,7 @@ export interface InvoiceData {
 	invoiceNumber: string;
 	dateIssued: string;
 	dueDate: string;
+	dateFormat: DateFormatId;
 	currencySymbol: string;
 	showDueDate: boolean;
 	includeTax: boolean;
@@ -85,6 +87,7 @@ function getDefaults(): InvoiceData {
 		invoiceNumber: generateInitialInvoiceNumber(defaultName),
 		dateIssued: todayStr,
 		dueDate: dueStr,
+		dateFormat: 'us' as DateFormatId,
 		currencySymbol: '$',
 		showDueDate: true,
 		includeTax: false,

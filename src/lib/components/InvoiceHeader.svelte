@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { DatePicker } from '@svelte-plugins/datepicker';
 	import { invoice, updateInvoiceInitial } from '$lib/stores/invoice';
+	import { DATE_FORMATS, formatDate } from '$lib/utils/currency';
+	import type { DateFormatId } from '$lib/utils/currency';
 
 	let isDateIssuedOpen = false;
 	let isDueDateOpen = false;
@@ -51,24 +53,20 @@
 		return `${y}-${m}-${day}`;
 	}
 
-	// Format a YYYY-MM-DD string as MM/DD/YYYY for display
+	// Format a YYYY-MM-DD string using the selected date format
 	function formatDisplay(dateStr: string): string {
 		if (!dateStr) return '';
-		const d = parseDate(dateStr);
-		if (!d) return dateStr;
-		const m = String(d.getMonth() + 1).padStart(2, '0');
-		const day = String(d.getDate()).padStart(2, '0');
-		return `${m}/${day}/${d.getFullYear()}`;
+		return formatDate(dateStr, $invoice.dateFormat);
 	}
 </script>
 
 <section class="flex flex-col md:flex-row justify-between gap-4 mb-7" id="invoiceHeader">
 	<!-- Left: Icon + Sender Info -->
-	<div>
+	<div class="min-w-0 max-w-sm" style="resize: horizontal; overflow: hidden;">
 		<div class="w-14 h-14 rounded-xl flex items-center justify-center mb-2 no-print" style="background-color: var(--primary-light);">
 			<span class="material-symbols-outlined" style="font-size: 32px; color: var(--primary);">edit_note</span>
 		</div>
-		<div class="space-y-1">
+		<div class="space-y-0.5">
 			<input
 				type="text"
 				class="editable-field block text-lg font-bold text-gray-800 bg-transparent rounded-lg px-2 py-0.5 w-full"
@@ -80,7 +78,7 @@
 			<div class="flex items-center gap-1">
 				<input
 					type="text"
-					class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 flex-1 min-w-0"
+					class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-px flex-1 min-w-0"
 					value={$invoice.fromAddress1}
 					oninput={(e) => updateField('fromAddress1', e.currentTarget.value)}
 					aria-label="Your Address"
@@ -99,7 +97,7 @@
 			<div class="flex items-center gap-1">
 				<input
 					type="text"
-					class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 flex-1 min-w-0"
+					class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-px flex-1 min-w-0"
 					value={$invoice.fromAddress2}
 					oninput={(e) => updateField('fromAddress2', e.currentTarget.value)}
 					aria-label="Your City and State"
@@ -115,12 +113,12 @@
 			</div>
 			{/if}
 			{#if $invoice.showFromEmail || $invoice.showFromPhone}
-			<div class="mt-2 space-y-1">
+			<div class="mt-1 space-y-0.5">
 				{#if $invoice.showFromEmail}
 				<div class="flex items-center gap-1">
 					<input
 						type="email"
-						class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 flex-1 min-w-0"
+						class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-px flex-1 min-w-0"
 						value={$invoice.fromEmail}
 						oninput={(e) => updateField('fromEmail', e.currentTarget.value)}
 						aria-label="Your Email"
@@ -139,7 +137,7 @@
 				<div class="flex items-center gap-1">
 					<input
 						type="tel"
-						class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-0.5 flex-1 min-w-0"
+						class="editable-field block text-sm text-gray-500 bg-transparent rounded-lg px-2 py-px flex-1 min-w-0"
 						value={$invoice.fromPhone}
 						oninput={(e) => updateField('fromPhone', e.currentTarget.value)}
 						aria-label="Your Phone"
@@ -174,7 +172,7 @@
 				<input
 					type="text"
 					id="invoiceNumber"
-					class="editable-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto"
+					class="editable-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-52 block ml-auto"
 					style="background-color: var(--primary-ultralight);"
 					value={$invoice.invoiceNumber}
 					oninput={(e) => {
@@ -196,7 +194,7 @@
 					<input
 						type="text"
 						id="dateIssued"
-						class="editable-field date-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto cursor-pointer"
+						class="editable-field date-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-52 block ml-auto cursor-pointer"
 						style="background-color: var(--primary-ultralight);"
 						readonly
 						value={formatDisplay($invoice.dateIssued)}
@@ -219,7 +217,7 @@
 					<input
 						type="text"
 						id="dueDate"
-						class="editable-field date-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-44 block ml-auto cursor-pointer"
+						class="editable-field date-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-52 block ml-auto cursor-pointer"
 						style="background-color: var(--primary-ultralight);"
 						readonly
 						value={formatDisplay($invoice.dueDate)}
@@ -244,6 +242,20 @@
 				>
 					<div class="toggle-thumb"></div>
 				</div>
+			</div>
+			<div class="no-print">
+				<label for="dateFormat" class="text-xs font-semibold uppercase tracking-wider" style="color: var(--primary-muted);">Date Format</label>
+				<select
+					id="dateFormat"
+					class="editable-field rounded-2xl px-4 py-2 text-sm font-semibold text-right w-52 block ml-auto cursor-pointer"
+					style="background-color: var(--primary-ultralight);"
+					value={$invoice.dateFormat}
+					onchange={(e) => updateField('dateFormat', e.currentTarget.value)}
+				>
+					{#each DATE_FORMATS as fmt}
+						<option value={fmt.id}>{fmt.label} ({fmt.example})</option>
+					{/each}
+				</select>
 			</div>
 		</div>
 	</div>

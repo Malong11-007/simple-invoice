@@ -193,6 +193,11 @@ body {
 		margin-bottom: 1rem !important;
 		gap: 1rem !important;
 	}
+	#invoiceHeader > div:first-child {
+		resize: none !important;
+		overflow: visible !important;
+		max-width: none !important;
+	}
 
 	#invoiceHeader h2 {
 		font-size: 1.75rem !important;
